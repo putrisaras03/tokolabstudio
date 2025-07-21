@@ -1,0 +1,413 @@
+:root {
+  --primary: #4f46e5;
+  --bg: #f5f7fa;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--white);
+  height: 100vh;
+  padding: 20px 10px 10px;
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: 13px;
+  transition: width 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .brand span,
+.sidebar.collapsed ul li span {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  padding: 0 10px;
+}
+
+.logo .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary);
+}
+
+.logo .brand i,
+.logo .brand span {
+  color: var(--primary);
+}
+
+.logo .bars-wrapper {
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logo .bars-wrapper i {
+  color: #000;
+  font-size: 16px;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin-top: 10px;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+  color: var(--text-dark);
+  font-size: 13px;
+}
+
+.sidebar li i {
+  margin-right: 10px;
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.sidebar li a {
+  text-decoration: none !important;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 15px;
+}
+
+.main-content {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.expanded {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+.sidebar.collapsed .logo {
+  justify-content: center;
+}
+
+.sidebar.collapsed .brand {
+  display: none;
+}
+
+.sidebar.collapsed .menu-text {
+  display: none;
+}
+
+.sidebar .logo .bars-wrapper {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.sidebar.collapsed .logo .bars-wrapper {
+  margin: 0 auto;
+}
+
+.navbar {
+  left: 240px;
+  transition: left 0.3s ease;
+}
+
+.sidebar.collapsed ~ .main-content .navbar {
+  left: 70px;
+}
+
+.sidebar.collapsed + .main-content .navbar {
+  left: 70px;
+}
+
+/* Navbar */
+.navbar {
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  left: 240px;
+  right: 0;
+  top: 0;
+  z-index: 999;
+  transition: left 0.3s ease;
+}
+
+.main-content.expanded ~ .navbar {
+  left: 70px;
+}
+
+.dashboard {
+  padding: 80px 30px 30px 30px;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.chevron-icon {
+  font-size: 12px;
+  color: #333;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+  padding: 10px;
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+.chevron-icon {
+  font-size: 12px;
+  color: #333;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+  padding: 10px;
+  min-width: 150px;
+  z-index: 1000;
+  font-size: 13px;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block;
+  padding: 8px;
+  text-decoration: none;
+  color: #333;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+.dropdown-menu.show {
+  display: block;
+}
+
+/* === MAIN CONTENT === */
+.main-content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 100px 30px 30px;
+}
+
+/* === KONTEN UTAMA (AKUN) === */
+.akun-wrapper {
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.akun-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.akun-header h2 {
+  font-size: 24px;
+  color: #2c3e50;
+}
+
+.btn-tambah {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.btn-tambah:hover {
+  background: #a09aff;
+}
+
+.table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.akun-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.akun-table thead {
+  background: #f1f1f1;
+}
+
+.akun-table th,
+.akun-table td {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.badge.sukses {
+  background: #d4edda;
+  color: #256029;
+}
+
+.badge.gagal {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.btn-detail {
+  background: #a7c0fb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-detail:hover {
+  background: #2980b9;
+}
+
+.aksi-btns button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 8px;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.btn-edit:hover {
+  color: #3498db;
+}
+
+.btn-hapus:hover {
+  color: #e74c3c;
+}
