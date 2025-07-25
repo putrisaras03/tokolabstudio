@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('otp_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('phone');
-            $table->string('password');
-            $table->string('img_profile')->nullable(true);
-            $table->rememberToken();
+            $table->string('phone'); // Nomor WhatsApp pengguna
+            $table->string('code');  // Kode OTP
+            $table->timestamp('expires_at'); // Tanggal kedaluwarsa OTP
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('otp_codes');
     }
 };
