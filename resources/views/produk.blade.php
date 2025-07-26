@@ -34,7 +34,9 @@
       <div class="user-area">
         <div class="greeting">Hi, {{ $user->username ?? $user->name }}</div>
         <div class="avatar">
-          <img src="/assets/img/profil.jpg" alt="Profil" />
+          <img 
+            src="{{ $user->img_profile ? asset('img_profiles/' . $user->img_profile) : asset('assets/img/profil.jpg') }}" 
+            alt="Profil" />
         </div>
         <div class="dropdown">
           <div class="dropdown-toggle" onclick="toggleDropdown()">

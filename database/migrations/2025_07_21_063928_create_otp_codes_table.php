@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('otp_codes', function (Blueprint $table) {
             $table->id();
             $table->string('phone'); // Nomor WhatsApp pengguna
-            $table->string('code');  // Kode OTP
+            $table->integer('code');  // Kode OTP
             $table->timestamp('expires_at'); // Tanggal kedaluwarsa OTP
             $table->timestamps();
         });

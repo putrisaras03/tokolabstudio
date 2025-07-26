@@ -32,9 +32,11 @@
     <div class="navbar">
       <div class="nav-title">Pengaturan Akun</div>
       <div class="user-area">
-        <div class="greetingg">Hi, {{ $user->username ?? $user->name }} </div>
+        <div class="greeting">Hi, {{ $user->username ?? $user->name }} </div>
         <div class="avatar">
-          <img src="/assets/img/profil.jpg" alt="Profil" />
+          <img 
+            src="{{ $user->img_profile ? asset('img_profiles/' . $user->img_profile) : asset('assets/img/profil.jpg') }}" 
+            alt="Profil" />
         </div>
         <div class="dropdown">
           <div class="dropdown-toggle" onclick="toggleDropdown()">

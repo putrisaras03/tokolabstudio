@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Admin - Tokolabs</title>
@@ -44,61 +45,90 @@
     </div>
   </div>
 
+
   <!-- Modal Lupa Password -->
-  <div id="modal" class="modal" style="display:none; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    <div class="modal-box" style="background:#fff; padding:20px; border-radius:8px; max-width:400px; width:100%; text-align:center;">
-      <img src="/assets/img/tokolabs.png" alt="Lock Icon" style="max-width: 100px; margin-bottom: 10px;">
-      <h3>Lupa Password</h3>
+<div id="modal" class="modal" style="display:none; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div class="modal-box" style="background:#fff; padding:20px; border-radius:8px; max-width:400px; width:100%; text-align:center;">
+    <img src="/assets/img/tokolabs.png" alt="Lock Icon" style="max-width: 100px; margin-bottom: 10px;">
+    <h3>Lupa Password</h3>
 
-      {{-- Form OTP --}}
-      <form method="POST" action="{{ route('password.sendOtp') }}">
-        @csrf
+    {{-- Form Kirim / Verifikasi OTP --}}
+    @if (session('otp_phase'))
+  <form method="POST" action="{{ route('password.verifyOtp') }}">
+  @else
+    <form method="POST" action="{{ route('password.sendOtp') }}">
+  @endif
+      @csrf
 
-        <div class="form-group">
-          <i class="fas fa-envelope"></i>
-          <input type="text" name="phone" placeholder=" " value="{{ old('phone') }}" required />
-          <label>Masukkan Nomor WhatsApp</label>
-        </div>
+      {{-- Nomor WhatsApp --}}
+      @if (!session('otp_phase'))
+      <div class="form-group">
+        <i class="fas fa-envelope"></i>
+        <input type="text" name="phone" placeholder=" " value="{{ old('phone') }}" required />
+        <label>Masukkan Nomor WhatsApp</label>
+      </div>
+      @endif
 
-        {{-- Error OTP --}}
-        @if ($errors->has('phone'))
-            <small style="color: #ff0000; display:block; margin-bottom:10px;">{{ $errors->first('phone') }}</small>
-        @endif
+      {{-- OTP --}}
+      @if (session('otp_phase'))
+      <input type="hidden" name="phone" value="{{ session('otp_phone') }}">
+      <div class="form-group">
+        <i class="fas fa-key"></i>
+        <input type="text" name="otp" placeholder=" " required />
+        <label>Masukkan Kode OTP</label>
+      </div>
+      @endif
 
-        {{-- Sukses OTP --}}
-        @if (session('success'))
-            <small style="color: #008000; display:block; margin-bottom:10px;">{{ session('success') }}</small>
-        @endif
+      {{-- Pesan Error --}}
+      @if ($errors->any())
+        <small style="color: #ff0000; display:block; margin-bottom:10px;">{{ $errors->first() }}</small>
+      @endif
 
-        <div class="modal-buttons" style="display:flex; justify-content:center; gap:10px;">
-          <button type="submit" class="send" style="padding:10px 20px; background:#28a745; color:#fff; border:none; border-radius:4px; cursor:pointer;">Kirim</button>
-          <button type="button" class="close" onclick="closeModal()" style="padding:10px 20px; background:#dc3545; color:#fff; border:none; border-radius:4px; cursor:pointer;">Tutup</button>
-        </div>
-      </form>
-    </div>
+      {{-- Pesan Sukses --}}
+      @if (session('success'))
+        <small style="color: #008000; display:block; margin-bottom:10px;">{{ session('success') }}</small>
+      @endif
+
+      <div class="modal-buttons" style="display:flex; justify-content:center; gap:10px;">
+        <button type="submit" class="send" style="padding:10px 20px; background:#28a745; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+          {{ session('otp_phase') ? 'Verifikasi OTP' : 'Kirim OTP' }}
+        </button>
+        <button type="button" class="close" onclick="closeModal()" style="padding:10px 20px; background:#dc3545; color:#fff; border:none; border-radius:4px; cursor:pointer;">Tutup</button>
+      </div>
+
+      {{-- Tombol Ulangi Proses --}}
+      @if (session('otp_phase'))
+      <div style="margin-top: 10px;">
+        <a href="{{ route('modal.forgot-password.reset') }}" style="color: #007bff; text-decoration: underline;">
+        </a>
+      </div>
+      @endif
+    </form>
   </div>
+</div>
 
-  <!-- Script -->
+<!-- Script Modal -->
+<script>
+  function openModal() {
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('modal');
+    if (event.target == modal) {
+      closeModal();
+    }
+  }
+</script>
+
+{{-- Buka modal hanya jika session show_modal diset --}}
+@if (session('show_modal'))
   <script>
-    function openModal() {
-      document.getElementById('modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-
-    window.onclick = function(event) {
-      const modal = document.getElementById('modal');
-      if (event.target == modal) {
-        closeModal();
-      }
-    }
-
-    // Auto-buka modal jika error/sukses dari OTP
-    @if ($errors->has('phone') || session('success'))
-      openModal();
-    @endif
+    openModal();
   </script>
-</body>
-</html>
+@php session()->forget('show_modal'); @endphp
+@endif
