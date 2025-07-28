@@ -210,6 +210,7 @@ body {
   object-fit: cover;
 }
 
+/* dropdown sandi dan logout */
 .dropdown {
   position: relative;
   display: flex;
@@ -228,17 +229,19 @@ body {
   color: #333;
 }
 
-.dropdown-menu {
+
+.dropdown-menu { 
   display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-  padding: 10px;
-  min-width: 150px;
-  z-index: 1000;
+position: absolute;
+top: 50px;
+right: 0;
+background-color: #fff;
+border-radius: 5px;
+box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+padding: 10px;
+width: 160px; /* Lebih panjang */
+z-index: 1000;
+font-size: 13px;
 }
 
 .dropdown-menu a,
@@ -258,156 +261,202 @@ body {
   background-color: #f0f0f0;
 }
 
-.chevron-icon {
-  font-size: 12px;
-  color: #333;
+    /* === FORM SECTION === */
+ .tab-wrapper {
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: 50px auto 10px; /* 100px dari atas (navbar), auto untuk tengahkan, 10px ke bawah */
+  border-radius: 12px;
 }
 
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-  padding: 10px;
-  min-width: 150px;
-  z-index: 1000;
-  font-size: 13px;
-}
 
-.dropdown-menu a,
-.dropdown-menu button {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  text-align: left;
-  width: 100%;
-}
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
-}
-.dropdown-menu.show {
-  display: block;
-}
-
-/* === MAIN CONTENT === */
-.main-content {
-  margin-left: 220px;
-  width: calc(100% - 220px);
-  padding: 100px 30px 30px;
-}
-
-/* === KONTEN UTAMA (AKUN) === */
-.akun-wrapper {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.akun-header {
+/* TAB NAVIGATION */
+.tab-navigation {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  margin-bottom: 30px;
+  gap: 10px;
 }
 
-.akun-header h2 {
-  font-size: 24px;
-  color: #2c3e50;
-}
 
-.btn-tambah {
-  background: #4f46e5;
-  color: white;
+.tab-button {
+  background-color: #ffffff;
   border: none;
-  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  transition: background 0.3s;
+  color: #666;
+  transition: 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 3px solid transparent;
 }
 
-.btn-tambah:hover {
-  background: #a09aff;
+.tab-button:hover {
+  background-color: #a7a7ea;
 }
 
-.table-container {
-  overflow-x: auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+.tab-button.active {
+  color: #4c50f6;
+  border-bottom: 3px solid #4c50f6;
+  box-shadow: 0 4px 10px rgba(76, 80, 246, 0.1);
 }
 
-.akun-table {
+/* TAB CONTENT */
+.tab-content {
+  display: none;
+  margin-top: 50px;
+}
+
+.tab-content.active {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 80px;
+  flex-wrap: wrap;
+}
+
+/* PROFILE PAGE */
+.profile-password-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  flex-wrap: wrap;
   width: 100%;
-  border-collapse: collapse;
 }
 
-.akun-table thead {
-  background: #f1f1f1;
+/* FOTO PROFIL */
+.profile-section {
+  text-align: center;
+  margin-top: 20px;
 }
 
-.akun-table th,
-.akun-table td {
-  padding: 14px 16px;
-  text-align: left;
-  font-size: 14px;
-  border-bottom: 1px solid #e0e0e0;
+.profile-pic-container {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
 }
 
-.badge {
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 13px;
+.profile-pic {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.camera-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 32px;
+  background-color: rgba(128, 128, 128, 0.5);
+  border-radius: 50%;
+  opacity: 0;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.profile-pic-container:hover .camera-icon {
+  opacity: 1;
+}
+
+.greeting {
   font-weight: bold;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #333;
 }
 
-.badge.sukses {
-  background: #d4edda;
-  color: #256029;
+/* FORM SECTION */
+.form-section {
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
 }
 
-.badge.gagal {
-  background: #f8d7da;
-  color: #721c24;
+.form-section h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 25px;
 }
 
-.btn-detail {
-  background: #a7c0fb;
+/* FORM INPUT & BUTTONS */
+.profile-info-form input,
+.form-section form input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 28px; /* sebelumnya 20px */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+
+.profile-info-form button,
+.form-section form button {
+  width: 100%;
+  background-color: #4c50f6;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.btn-detail:hover {
-  background: #2980b9;
-}
-
-.aksi-btns button {
-  background: none;
-  border: none;
-  cursor: pointer;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: bold;
   font-size: 16px;
-  margin-right: 8px;
-  color: #555;
-  transition: color 0.2s;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
-.btn-edit:hover {
-  color: #3498db;
+.profile-info-form button:hover,
+.form-section form button:hover {
+  background-color: #3d41d8;
+}
+.tab-card {
+  background-color: #fff;
+  padding: 30px 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.btn-hapus:hover {
-  color: #e74c3c;
+.popup-notification {
+  position: fixed;
+  top: 60px;
+  right: 380px; /* Ubah angka ini untuk lebih ke kiri atau ke kanan */
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
 }
+
+.popup-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.popup-notification i {
+  font-size: 18px; /* Icon tidak terlalu besar */
+}
+

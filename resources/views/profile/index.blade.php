@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <style>
+  .notif-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeSlide 0.4s ease;
+  }
+
+  .notif-icon {
+    font-size: 18px;
+  }
+
+  .notif-popup.hidden {
+    display: none;
+  }
+
+  @keyframes fadeSlide {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+</style>
+
   <meta charset="UTF-8">
   <title>Profile - TokoLabs</title>
   <link rel="stylesheet" href="{{ asset('assets/css/index_profile.css') }}">
@@ -8,6 +48,11 @@
 </head>
 <body>
   <div class="container">
+    <div id="notif-popup" class="notif-popup hidden">
+      <span class="notif-icon">✔</span>
+      <span id="notif-message">Notifikasi</span>
+    </div>
+
     <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="logo">
@@ -85,10 +130,13 @@
         <!-- FORM DI KANAN -->
         <div class="form-section">
            @if(session('success'))
-            <div class="alert alert-success">
-              {{ session('success') }}
-            </div>
+            <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                showNotification(@json(session('success')));
+              });
+            </script>
           @endif
+
           <form id="profile-form" class="profile-info-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('POST')
@@ -114,21 +162,21 @@
             <button type="submit">Simpan Password</button>
           </form>
         <!-- Tambahkan jika ingin tampilkan error -->
-      @if ($errors->any())
-        <div class="alert alert-danger">
-          <ul>
-            @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
-            @endforeach
-          </ul>
-        </div>
-      @endif
+      @if(session('success'))
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      showNotification(@json(session('success')));
+    });
+  </script>
+@endif
 
-      @if (session('success'))
-        <div class="alert alert-success">
-          {{ session('success') }}
-        </div>
-      @endif
+@if($errors->any())
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      showNotification("Terjadi kesalahan. Silakan periksa kembali form.");
+    });
+  </script>
+@endif
     </div>
   </div>
 </div>
@@ -192,6 +240,19 @@
       });
     }
   });
+</script>
+<script>
+  function showNotification(message) {
+    const notif = document.getElementById("notif-popup");
+    const notifMessage = document.getElementById("notif-message");
+
+    notifMessage.textContent = message;
+    notif.classList.remove("hidden");
+
+    setTimeout(() => {
+      notif.classList.add("hidden");
+    }, 3000);
+  }
 </script>
 </body>
 </html>

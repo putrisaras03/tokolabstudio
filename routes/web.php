@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ProductController;
 
 // Route utama login
 Route::get('/', function () {
@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
-Route::get('/produk', [ProdukController::class, 'index'])->middleware('auth');
+Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
 
 Route::get('akun', function () {
     return view('akun');
