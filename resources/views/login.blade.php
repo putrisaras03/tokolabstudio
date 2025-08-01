@@ -66,6 +66,13 @@
         <i class="fas fa-envelope"></i>
         <input type="text" name="phone" placeholder=" " value="{{ old('phone') }}" required />
         <label>Masukkan Nomor WhatsApp</label>
+
+        {{-- Tampilkan error phone --}}
+        @if ($errors->has('phone'))
+          <small style="color: #ff0000; display:block; margin-top:5px;">
+            {{ $errors->first('phone') }}
+          </small>
+        @endif
       </div>
       @endif
 
@@ -80,7 +87,7 @@
       @endif
 
       {{-- Pesan Error --}}
-      @if ($errors->any())
+      @if ($errors->has('otp'))
         <small style="color: #ff0000; display:block; margin-bottom:10px;">{{ $errors->first() }}</small>
       @endif
 

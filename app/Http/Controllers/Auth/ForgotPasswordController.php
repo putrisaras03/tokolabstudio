@@ -34,7 +34,9 @@ class ForgotPasswordController extends Controller
 
     $user = User::where('phone', $request->phone)->first();
     if (!$user) {
-        return back()->withErrors(['phone' => 'Nomor tidak ditemukan.'])->withInput();
+        return back()->withErrors(['phone' => 'Nomor tidak ditemukan.'])
+        ->withInput()
+        ->with('show_modal', true);
     }
 
     $otp = rand(100000, 999999);
@@ -104,6 +106,19 @@ class ForgotPasswordController extends Controller
             'otp' => 'required|digits:6',
         ]);
 
+        // Cek apakah nomor ada di tabel user
+        $user = User::where('phone', $request->phone)->first();
+        if (!$user) {
+            return back()->withErrors(['phone' => 'Nomor tidak ditemukan.'])
+                ->withInput()
+                ->with([
+                    'otp_phase' => true,
+                    'otp_phone' => $request->phone,
+                    'show_modal' => true
+                ]);
+        }
+
+        // validasi otp
         $otpRecord = OtpCode::where('phone', $request->phone)
             ->where('code', $request->otp)
             ->where('expires_at', '>', now())
@@ -111,7 +126,13 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (!$otpRecord) {
-            return back()->withErrors(['otp' => 'Kode OTP salah atau sudah kedaluwarsa.'])->withInput();
+            return back()->withErrors(['otp' => 'Kode OTP salah atau sudah kedaluwarsa.'])
+            ->withInput()
+            ->with([
+            'otp_phase' => true,
+            'otp_phone' => $request->phone,
+            'show_modal' => true
+            ]);
         }
 
         // Hapus OTP setelah verifikasi sukses
