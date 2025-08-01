@@ -16,31 +16,20 @@ Route::get('/', function () {
 // Login
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login'); 
 Route::post('/login', [AuthController::class, 'login'])->name('login');  
-
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); 
 
 
 // Menampilkan form awal (input WhatsApp / OTP)
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
-
-// Proses kirim OTP via WhatsApp
 Route::post('/forgot-password/send-otp', [ForgotPasswordController::class, 'sendOtp'])->name('password.sendOtp');
-
-// Proses verifikasi OTP
 Route::post('/forgot-password/verify-otp', [ForgotPasswordController::class, 'verifyOtp'])->name('password.verifyOtp');
-
-// Menampilkan form reset password
 Route::get('/reset-password', [ForgotPasswordController::class, 'showResetForm'])
     ->name('password.reset.form');
-
-// Menyimpan password baru
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.reset');
 
 // halaman setelah login
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
-
-
 Route::middleware('auth')->group(function () {
     // Halaman profil
     Route::get('/profile', [ProfileController::class, 'showProfile'])->name('profile');
@@ -55,11 +44,6 @@ Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
 
 Route::get('akun', function () {
     return view('akun');
-});
-
-
-Route::get('/analitik', function () {
-    return view('analitik');
 });
 
 // Route untuk membuka modal lupa password via session
