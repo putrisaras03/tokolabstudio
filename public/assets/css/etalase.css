@@ -1,0 +1,717 @@
+:root {
+  --primary: #4f46e5;
+  --bg: #f5f7fa;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 240px;
+  background: var(--white);
+  height: 100vh;
+  padding: 20px 10px 10px;
+  border-right: 1px solid #e5e7eb;
+  position: fixed;
+  left: 0;
+  top: 0;
+  font-size: 13px;
+  transition: width 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .brand span,
+.sidebar.collapsed ul li span {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  padding: 0 10px;
+}
+
+.logo .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary);
+}
+
+.logo .brand i,
+.logo .brand span {
+  color: var(--primary);
+}
+
+.logo .bars-wrapper {
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.logo .bars-wrapper i {
+  color: #000;
+  font-size: 16px;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin-top: 10px;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+  color: var(--text-dark);
+  font-size: 13px;
+}
+
+.sidebar li i {
+  margin-right: 10px;
+  font-size: 14px;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.sidebar li a {
+  text-decoration: none !important;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 15px;
+}
+
+.logout-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logout-btn {
+  width: 180px;
+  padding: 10px 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff2e2e;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn i {
+  margin-right: 6px;
+}
+
+.logout-btn:hover {
+  background-color: #cc1f1f;
+}
+
+.sidebar.collapsed .logout-text,
+.sidebar.collapsed .brand,
+.sidebar.collapsed .menu-text {
+  display: none;
+}
+
+.sidebar .logo .bars-wrapper {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.sidebar.collapsed .logo .bars-wrapper {
+  margin: 0 auto;
+}
+
+.navbar {
+  left: 240px;
+  transition: left 0.3s ease;
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.main-content {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.expanded {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+.main-content.expanded ~ .navbar,
+.sidebar.collapsed ~ .main-content .navbar,
+.sidebar.collapsed + .main-content .navbar {
+  left: 70px;
+}
+
+.dashboard {
+  padding: 80px 30px 30px 30px;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.greetingg {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* WRAPPER */
+.rekomendasi-etalase {
+  padding: 90px;
+  background-color: #f5f6ff;
+  min-height: 100vh;
+}
+
+.etalase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.btn-tambah-akun {
+  background-color: #5c6bc0;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-tambah-akun i {
+  margin-right: 6px;
+}
+
+.akun-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.akun-card {
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  border: 1.5px solid #cfd3ff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.04);
+}
+
+.card-overlay {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(16, 1, 54, 0.3); /* Ubah angka 0.3 sesuai gelap yang diinginkan */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.akun-card.overlay .card-overlay {
+  opacity: 1;
+}
+
+
+.akun-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.akun-number {
+  background-color: #5c6bc0;
+  color: white;
+  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.akun-info-wrapper {
+  text-align: center;
+  flex-grow: 1;
+}
+
+.akun-info-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  margin-left: -8px;
+}
+
+.akun-nama {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.akun-studio {
+  font-size: 14px;
+  color: #555;
+}
+.akun-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.more-icon {
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  color: #333;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 35px;
+  right: 10px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+
+.dropdown-menu button {
+  padding: 10px 14px;
+  border: none;
+  background: white;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-menu button:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f5f7ff;
+  color: #178027;
+}
+
+.dropdown-menu i {
+  font-size: 15px;
+}
+.dropdown-menu button:nth-child(2):hover {
+  background-color: #ffecec;
+  color: #d32f2f;
+}
+
+
+.akun-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 14px 0;
+}
+
+.akun-stats div h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #5c6bc0;
+}
+
+.akun-stats div p {
+  font-size: 13px;
+  color: #999;
+  margin-top: 4px;
+}
+
+.akun-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-atur,
+.btn-lihat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-atur {
+  background-color: #d9f2e6;
+  text-decoration: none;  
+  color: #3e8a5c;
+}
+
+.btn-atur i {
+  color: #3e8a5c;
+}
+
+.btn-lihat {
+  background-color: #e6ebf9;
+  text-decoration: none;  
+  color: #37479b;
+}
+
+.btn-lihat i {
+  color: #37479b;
+}
+
+.pagination {
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px; 
+}
+
+.pagination button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #f0f0f0;
+  border-color: #888;
+}
+
+.pagination .active {
+  background-color: #5c6bc0;
+  color: white;
+  font-weight: bold;
+  border-color: #5c6bc0;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); /* Lebih terang dari 0.5 */
+  z-index: 99;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.modal-overlay.show {
+  display: flex; /* Hanya aktif jika ada class show */
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 15px;
+  padding: 24px 22px;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.068);
+  position: relative;
+  margin-left: 240px;
+}
+
+.modal-close {
+position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.modal-close:hover {
+  color: #444;
+}
+
+.modal-icon {
+  background: #e0dfff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-icon i {
+  color: #484850;
+  font-size: 22px;
+}
+
+.modal-box h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.modal-box p {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.modal-form .input-group {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.modal-form .input-group i {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.modal-form input,
+.modal-form select {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.btn-modal-submit {
+  width: 100%;
+  background: #5a54e8;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.btn-modal-submit:hover {
+  background: #4940d3;
+}
+.edit-modal-overlay {
+  display: none; /* ini yang bikin modal tidak muncul saat awal */
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.edit-modal {
+  background-color: #fff;
+  padding: 24px 22px;
+  border-radius: 16px;
+  width: 300px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  z-index: 999; 
+  font-family: 'Segoe UI', sans-serif;
+  margin-left: 240px;
+}
+
+/* Lingkaran ikon */
+.modal-icon-circle {
+  width: 64px;
+  height: 64px;
+  background-color: #e6e6ff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  color: #333;
+  margin: 0 auto 15px;
+}
+
+/* Judul dan subjudul */
+.edit-modal h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.edit-modal p {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 18px;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+/* Ikon di input */
+.form-group .input-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  pointer-events: none;
+}
+
+/* Tombol */
+.btn.btn-primary {
+  background-color: #5a54e8;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.btn.btn-primary:hover {
+  background-color: #3d6de0;
+}
+
+/* Tombol tutup */
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.btn-close:hover {
+  color: #444;
+}

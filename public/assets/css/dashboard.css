@@ -33,6 +33,10 @@ body {
   font-size: 13px;
   transition: width 0.3s ease;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 .sidebar.collapsed {
@@ -118,25 +122,37 @@ body {
   font-size: 15px;
 }
 
-.main-content {
-  margin-left: 240px;
-  width: calc(100% - 240px);
-  transition: margin-left 0.3s ease;
-}
-
-.main-content.expanded {
-  margin-left: 70px;
-  width: calc(100% - 70px);
-}
-
-.sidebar.collapsed .logo {
+.logout-wrapper {
+  display: flex;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
-.sidebar.collapsed .brand {
-  display: none;
+.logout-btn {
+  width: 180px;
+  padding: 10px 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ff2e2e;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
+.logout-btn i {
+  margin-right: 6px;
+}
+
+.logout-btn:hover {
+  background-color: #cc1f1f;
+}
+
+.sidebar.collapsed .logout-text,
+.sidebar.collapsed .brand,
 .sidebar.collapsed .menu-text {
   display: none;
 }
@@ -153,18 +169,6 @@ body {
 .navbar {
   left: 240px;
   transition: left 0.3s ease;
-}
-
-.sidebar.collapsed ~ .main-content .navbar {
-  left: 70px;
-}
-
-.sidebar.collapsed + .main-content .navbar {
-  left: 70px;
-}
-
-/* Navbar */
-.navbar {
   height: 60px;
   background: #ffffff;
   display: flex;
@@ -173,14 +177,25 @@ body {
   padding: 0 30px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   position: fixed;
-  left: 240px;
   right: 0;
   top: 0;
   z-index: 999;
-  transition: left 0.3s ease;
 }
 
-.main-content.expanded ~ .navbar {
+.main-content {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.expanded {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+.main-content.expanded ~ .navbar,
+.sidebar.collapsed ~ .main-content .navbar,
+.sidebar.collapsed + .main-content .navbar {
   left: 70px;
 }
 
@@ -201,7 +216,6 @@ body {
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
-  position: relative;
 }
 
 .avatar img {
@@ -210,135 +224,127 @@ body {
   object-fit: cover;
 }
 
-/* dropdown sandi dan logout */
-.dropdown {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.chevron-icon {
-  font-size: 12px;
+.greetingg {
+  font-size: 14px;
   color: #333;
+  font-weight: 500;
 }
 
 
-.dropdown-menu { 
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-  padding: 10px;
-  min-width: 150px;
-  z-index: 1000;
+/* Kontainer isi dashboard */
+.dashboard-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 90px 30px 30px 30px; /* cukup padding kiri 30px */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  flex: 1 1 45%;
+  min-width: 260px;
+}
+
+
+/* Header tab untuk Umur Produk */
+.tab-header {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 12px;
   font-size: 13px;
 }
 
-.dropdown-menu a,
-.dropdown-menu button {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  text-align: left;
-  width: 100%;
+.tab-header span {
+  cursor: pointer;
+  color: #666;
+  padding-bottom: 4px;
 }
 
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
+.tab-header .active {
+  color: #3c3eff;
+  border-bottom: 2px solid #3c3eff;
+  font-weight: 600;
 }
 
-/* === Chart Section === */
-.chart-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.chart-half,
-.chart-full {
-  background: var(--white);
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  padding: 15px;
-}
-
-.chart-full {
-  grid-column: span 2;
-}
-
-canvas {
-  width: 100% !important;
-  max-height: 180px !important;
-}
-
-/* === Table Section === */
-.produk-tabel {
-  background: var(--white);
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  margin-top: 20px;
-}
-
-.produk-tabel h3 {
-  margin-bottom: 20px;
-  color: var(--text-dark);
-}
-
-.produk-tabel table {
+/* Tabel umum */
+table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
+  margin-top: 8px;
+  font-size: 13px;
 }
 
-.produk-tabel thead {
-  background-color: #eef2ff;
-}
-
-.produk-tabel th,
-.produk-tabel td {
-  padding: 14px 16px;
-  border: 1px solid #e5e7eb;
+th, td {
+  padding: 8px 10px;
   text-align: left;
 }
 
-.produk-tabel tr:nth-child(even) {
-  background-color: #f9fafb;
+thead {
+  background-color: #f1f2f6;
 }
 
-.produk-tabel tr:hover {
-  background-color: #f3f4f6;
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.badge-komisi {
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
+/* Tren naik atau turun */
+.tren {
+  font-weight: bold;
+}
+
+.tren.naik {
+  color: green;
+}
+
+/* Label kategori */
+.label {
   display: inline-block;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 6px;
+  color: #fff;
 }
 
-.rendah {
-  background-color: #fee2e2;
-  color: #b91c1c;
+.label.skincare {
+  background-color: #ff6b6b;
 }
 
-.tinggi {
-  background-color: #d1fae5;
-  color: #065f46;
+.label.makeup {
+  background-color: #7f7fff;
+}
+
+.label.dapur {
+  background-color: #59c378;
+}
+
+.label.elektronik {
+  background-color: #646464;
+}
+
+/* Komisi kecil */
+.komisi-tabel {
+  font-size: 11px;
+  color: #4caf50;
+  display: block;
+  margin-top: 4px;
+}
+
+
+/* Responsif: layar kecil jadi 1 kolom */
+@media (max-width: 600px) {
+  .dashboard-content {
+    gap: 12px;
+    padding: 90px 12px 30px; /* Tambah jarak top sedikit agar tetap aman */
+  }
+
+  .box {
+    flex: 1 1 100%;
+  }
 }

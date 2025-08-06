@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\LiveAccountController;
 
 // Route utama login
 Route::get('/', function () {
@@ -40,10 +41,33 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
+Route::get('/etalase', [LiveAccountController::class, 'index'])->middleware('auth')->name('etalase');
+// Menampilkan daftar akun live (halaman utama)
+Route::get('/live-accounts', [LiveAccountController::class, 'index'])->name('live-accounts.index');
+
+// Menampilkan form tambah akun live
+Route::get('/live-accounts/create', [LiveAccountController::class, 'create'])->name('live-accounts.create');
+
+// Menyimpan akun live baru
+Route::post('/live-accounts', [LiveAccountController::class, 'store'])->name('live-accounts.store');
+
+// Menampilkan form edit akun live
+Route::get('/live-accounts/{id}/edit', [LiveAccountController::class, 'edit'])->name('live-accounts.edit');
+
+// Memperbarui data akun live
+Route::put('/live-accounts/{id}', [LiveAccountController::class, 'update'])->name('live-accounts.update');
+
+// Menghapus akun live
+Route::delete('/live-accounts/{id}', [LiveAccountController::class, 'destroy'])->name('live-accounts.destroy');
+
 Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
 
-Route::get('akun', function () {
-    return view('akun');
+Route::get('/schedule', function () {
+    return view('schedule');
+});
+
+Route::get('/kategori', function () {
+    return view('kategori');
 });
 
 // Route untuk membuka modal lupa password via session

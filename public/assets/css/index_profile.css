@@ -210,55 +210,9 @@ body {
   object-fit: cover;
 }
 
-/* dropdown sandi dan logout */
-.dropdown {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.dropdown-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-}
-
 .chevron-icon {
   font-size: 12px;
   color: #333;
-}
-
-
-.dropdown-menu { 
-  display: none;
-  position: absolute;
-  top: 50px;
-  right: 0;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
-  padding: 10px;
-  min-width: 150px;
-  z-index: 1000;
-  font-size: 13px;
-}
-
-.dropdown-menu a,
-.dropdown-menu button {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: #333;
-  background: none;
-  border: none;
-  text-align: left;
-  width: 100%;
-}
-
-.dropdown-menu a:hover,
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
 }
 
     /* === FORM SECTION === */

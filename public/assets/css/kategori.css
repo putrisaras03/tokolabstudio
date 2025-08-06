@@ -230,195 +230,110 @@ body {
   font-weight: 500;
 }
 
-  /* tabel produk */
-   .halaman-produk-container {
-  margin-top: 70px; /* 60 (navbar) + 10 */
-  padding: 20px 40px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+.kembali-wrapper {
+  padding: 20px 32px 0;
+  margin-top: 60px; 
 }
 
-
-.filter-search {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.search-bar {
-  flex: 0 0 250px; /* Tetap kecil */
-  padding: 10px 15px;
+.btn-kembali {
+  background-color: #ff2e2e;
+  color: #ffffff;
+  border: none;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 10px 16px;
   font-size: 14px;
-}
-
-.dropdown-group {
-  display: flex;
-  gap: 10px;
-}
-
-.filter-select,
-.sort-select {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  background-color: white;
-}
-
-.produk-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px; /* Jarak antar produk */
-  justify-content: flex-start;
-}
-
-.produk-item {
-  flex: 1 1 calc(16.66% - 8px); /* 6 kolom = 100% / 6 */
-  max-width: calc(16.66% - 8px);
-  box-sizing: border-box;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  font-family: Arial, sans-serif;
-}
-
-.produk-img {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  display: block;
-}
-
-.produk-info {
-  padding: 8px;
-}
-
-.produk-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin-bottom: 4px;
-  flex-wrap: wrap;
-}
-
-.produk-label {
-  background-color: #f44336;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
-.produk-harga {
-  color: #f44336;
-  font-weight: bold;
-  font-size: 11px;
-  margin-left: auto;
-}
-
-.produk-nama {
-  font-size: 12px;
-  font-weight: normal;
-  color: #000;
-  margin: 4px 0;
-  line-height: 1.2;
-  height: 2.4em * 2; /* dua baris */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.produk-rating-terjual {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.produk-rating {
-  background-color: #fff3cd;
-  color: #000;
-  border: 1px solid #ffeeba;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-}
-
-.rating-icon {
-  margin-right: 4px;
-}
-
-.produk-terjual {
-  font-size: 10px;
-  color: #444;
-}
-
-/* Umum untuk wrapper pagination */
-.pagination-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-  font-family: Arial, sans-serif;
-  font-size: 13px;
-}
-
-/* Posisi */
-#paginationTop {
-  justify-content: flex-end;
-  margin: 12px 0;
-}
-#paginationBottom {
-  justify-content: center;
-  margin: 24px 0 8px;
-}
-
-/* Tombol Pagination */
-.pagination-wrapper button {
-  padding: 6px 12px; /* lebih kecil */
-  font-size: 13px;
-  font-weight: bold;
-  border: 1px solid #cfd2e4;
-  background-color: #fff;
-  color: #4f4f82;
+  font-weight: 500;
   cursor: pointer;
-  border-radius: 4px;
-  min-width: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   transition: background-color 0.2s ease;
 }
 
-/* Tombol Aktif (halaman sekarang) */
-.pagination-wrapper button.active {
-  background-color: #254ab0;
-  color: #fff;
+.btn-kembali:hover {
+  background-color: #e2e8f0;
+}
+
+.kategori-wrapper {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin: 32px;
+  margin-top: 20px; 
+}
+
+
+.kategori-saat-ini {
+  display: flex;
+  padding: 40px 30px;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom:5px;
+}
+
+.kategori-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kategori-box .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kategori-box .left img {
+  width: 24px;
+  height: 24px;
+}
+
+.kategori-box .left span {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.hapus-btn {
+  background-color: transparent;
   border: none;
-  opacity: 1; /* tetap solid */
+  cursor: pointer;
+  padding: 6px;
 }
 
-/* Tombol Disabled (kecuali tombol aktif) */
-.pagination-wrapper button:disabled:not(.active) {
-  opacity: 0.4;
-  cursor: not-allowed;
+.hapus-btn img {
+  width: 18px;
+  height: 18px;
 }
 
-/* Info Halaman */
-.page-info {
-  margin-right: 8px;
-  font-weight: bold;
+
+.kategori-tersedia {
+  display: grid;
+  padding: 0px 20px;
+  margin-top: 1px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.kategori-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
   font-size: 13px;
-  color: #5c5c91;
+}
+.kategori-item img {
+  width: 22px;
+  height: 22px;
+}
+.kategori-item input[type="checkbox"] {
+  margin-left: auto;
+  width: 16px;
+  height: 16px;
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->text('image_url')->nullable(); // URL gambar produk
             $table->text('name');
             $table->bigInteger('price');
-            $table->bigInteger('total_sales')->nullable(); // total penjualan produk
+            $table->text('total_sales')->nullable(); // total penjualan produk
             $table->decimal('rating', 2, 1)->nullable();
             $table->bigInteger('commission')->nullable(); // komisi Shopee (dalam % atau nominal)
             $table->integer('product_age_month')->nullable(); // umur produk (dalam hari)

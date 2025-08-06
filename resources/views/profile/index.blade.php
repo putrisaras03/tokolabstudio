@@ -66,9 +66,9 @@
 </div>
     <ul>
       <li><a href="dashboard"><i class="fa-solid fa-gauge-high"></i> <span class="menu-text">Dashboard</span></a></li>
-      <li><a href="produk"><i class="fa-solid fa-cart-shopping"></i> <span class="menu-text">Produk</span></a></li>
+      <li><a href="etalase"><i class="fa-solid fa-cart-shopping"></i> <span class="menu-text">Rekomendasi Produk</span></a></li>
       <li><a href="schedule"><i class="fa-solid fa-calendar-days"></i> <span class="menu-text">Scheduler</span></a></li>
-      <li><a href="etalase"><i class="fa-solid fa-user-gear"></i> <span class="menu-text">Manajemen & Etalase</span></a></li>
+      <li><a href="profile"><i class="fa-solid fa-user-gear"></i> <span class="menu-text">Pengaturan Akun</span></a></li>
     </ul>
   </aside>
 
@@ -77,20 +77,11 @@
     <div class="navbar">
       <div class="nav-title">Pengaturan Akun</div>
       <div class="user-area">
-        <div class="greeting">Hi, {{ $user->username ?? $user->name }} </div>
+        <div class="greeting">Hi, {{ $user->username ?? $user->name }}!</div>
         <div class="avatar">
           <img 
             src="{{ $user->img_profile ? asset('img_profiles/' . $user->img_profile) : asset('assets/img/profil.jpg') }}" 
             alt="Profil" />
-        </div>
-        <div class="dropdown">
-          <div class="dropdown-toggle" onclick="toggleDropdown()">
-            <i class="fa-solid fa-chevron-down chevron-icon"></i>
-          </div>
-          <div class="dropdown-menu" id="dropdownMenu">
-            <a href="{{ route('profile') }}">Pengaturan Akun</a>
-            <a href="#" onclick="konfirmasiLogout()" class="logout-link">Logout</a>
-          </div>
         </div>
       </div>
     </div>
@@ -202,13 +193,6 @@
     }
   </script>
   <script>
-  // Toggle dropdown menu saat avatar diklik
-  function toggleDropdown() {
-    const menu = document.getElementById("dropdownMenu");
-    if (menu) {
-      menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-  }
 
   // Konfirmasi logout
   function konfirmasiLogout() {
@@ -217,15 +201,6 @@
       window.location.href = "/";
     }
   }
-
-  // Sembunyikan dropdown jika klik di luar
-  document.addEventListener("click", function (event) {
-    const dropdown = document.querySelector(".dropdown");
-    const menu = document.getElementById("dropdownMenu");
-    if (dropdown && menu && !dropdown.contains(event.target)) {
-      menu.style.display = "none";
-    }
-  });
 
   // Toggle sidebar jika tombol tersedia
   document.addEventListener("DOMContentLoaded", function () {
