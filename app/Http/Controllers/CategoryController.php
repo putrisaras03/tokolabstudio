@@ -14,8 +14,11 @@ class CategoryController extends Controller
         // 2. Simpan ke database kalau perlu (optional)
         foreach ($categories as $cat) {
             Category::updateOrCreate(
-                ['id' => $cat['catid']], // pastikan field id di DB sesuai
-                ['name' => $cat['display_name'] ?? '']
+                ['catid' => $cat['catid']], // pakai 'catid' untuk matching dengan Shopee
+                [
+                    'display_name' => $cat['display_name'] ?? '',
+                    'parent_id'    => $cat['parent_catid'] ?? null, // kalau ada parent, simpan
+                ]
             );
         }
 

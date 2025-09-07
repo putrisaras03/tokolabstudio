@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id(); // auto-increment primary key
-            $table->bigInteger('catid')->unique(); // ID Shopee, wajib
-            $table->string('display_name')->nullable();
-            $table->bigInteger('parent_catid')->nullable(); // parent ID
+            $table->id();
+            $table->bigInteger('catid')->unique(); // Shopee category id
+            $table->string('display_name');
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

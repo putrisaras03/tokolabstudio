@@ -11,16 +11,26 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $product = Product::latest()->paginate(18);
-        $categories = Category::orderBy('name')->get();
+        // Ambil produk terbaru dengan relasi category, models, metadata
+        $products = Product::with(['category', 'models', 'metadata'])
+            ->latest()
+            ->paginate(18);
+
+        // Ambil semua kategori untuk filter
+        $categories = Category::orderBy('display_name')->get();
+
         $user = Auth::user();
-        return view('produk', compact('product', 'user', 'categories'));
+
+        return view('produk', compact('products', 'user', 'categories'));
     }
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        // Ambil 1 produk lengkap dengan relasi
+        $product = Product::with(['category', 'models', 'metadata'])->findOrFail($id);
+
         $user = Auth::user();
+
         return view('detail.produk', compact('product', 'user'));
     }
 }

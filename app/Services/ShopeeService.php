@@ -13,10 +13,8 @@ class ShopeeService
 
     public function __construct()
     {
-        // Path file cookie
         $this->cookiePath = storage_path('cookies/shopee.json');
 
-        // Setup Guzzle client dengan header yang mirip browser
         $this->client = new Client([
             'base_uri' => 'https://shopee.co.id',
             'timeout'  => 30,
@@ -48,7 +46,6 @@ class ShopeeService
         }
 
         $cookies = json_decode(file_get_contents($this->cookiePath), true) ?? [];
-
         $cookieArray = [];
         foreach ($cookies as $cookie) {
             $cookieArray[$cookie['name']] = $cookie['value'];
@@ -63,13 +60,11 @@ class ShopeeService
     protected function saveCookies($response): void
     {
         $setCookies = $response->getHeader('Set-Cookie');
-
         if (empty($setCookies)) return;
 
         $existing = json_decode(file_get_contents($this->cookiePath) ?? '[]', true);
 
         foreach ($setCookies as $set) {
-            // Parse nama & value dari Set-Cookie
             $parts = explode(';', $set);
             $nv = explode('=', trim($parts[0]), 2);
             if (count($nv) !== 2) continue;
@@ -77,7 +72,6 @@ class ShopeeService
             $name = $nv[0];
             $value = $nv[1];
 
-            // Update existing cookie jika ada
             $found = false;
             foreach ($existing as &$c) {
                 if ($c['name'] === $name) {
@@ -89,7 +83,6 @@ class ShopeeService
             unset($c);
 
             if (!$found) {
-                // Tambahkan cookie baru
                 $existing[] = [
                     'domain'   => '.shopee.co.id',
                     'name'     => $name,
@@ -115,94 +108,9 @@ class ShopeeService
             'cookies' => $cookieJar,
         ]);
 
-        // Merge cookies baru
         $this->saveCookies($response);
 
         $data = json_decode($response->getBody(), true);
-
         return $data['data'] ?? [];
-    }
-
-        /**
-     * Ambil produk berdasarkan kategori (catid)
-     */
-    public function getProductsByCategory(int $catid, int $limit = 2): array
-    {
-        $cookieJar = $this->loadCookies();
-
-        // 1. Ambil list produk di kategori
-        $response = $this->client->get('/api/v4/recommend/recommend_v2', [
-            'cookies' => $cookieJar,
-            'query' => [
-                'catid' => $catid,
-                'limit' => $limit,
-                'offset' => 0,
-                'bundle' => 'category_landing_page',
-                'section' => 'popular',
-            ],
-        ]);
-
-        $this->saveCookies($response);
-
-        $data = json_decode($response->getBody(), true);
-        $items = $data['data']['sections'][0]['data']['item'] ?? [];
-
-        $results = [];
-
-        foreach ($items as $item) {
-            $itemId = $item['itemid'];
-            $shopId = $item['shopid'];
-
-            // 2. Detail produk (get_pc)
-            $detailRes = $this->client->get('/api/v4/pdp/get_pc', [
-                'cookies' => $cookieJar,
-                'query' => [
-                    'item_id' => $itemId,
-                    'shop_id' => $shopId,
-                    'tz_offset_minutes' => 420,
-                    'detail_level' => 0,
-                ],
-            ]);
-            $detail = json_decode($detailRes->getBody(), true);
-
-            // 3. Rating produk
-            $ratingRes = $this->client->get('/api/v2/item/get_ratings', [
-                'cookies' => $cookieJar,
-                'query' => [
-                    'filter' => 0,
-                    'flag' => 1,
-                    'limit' => 5,
-                    'offset' => 0,
-                    'type' => 0,
-                    'shopid' => $shopId,
-                    'itemid' => $itemId,
-                ],
-            ]);
-            $rating = json_decode($ratingRes->getBody(), true);
-
-            // 4. Komisi & shortlink (via affiliate API)
-            $affiliateClient = new Client([
-                'base_uri' => 'https://affiliate.shopee.co.id',
-                'timeout'  => 30,
-                'headers'  => $this->client->getConfig('headers'), // reuse header
-            ]);
-            $affRes = $affiliateClient->get('/api/v3/offer/product', [
-                'cookies' => $cookieJar,
-                'query' => [
-                    'item_id' => $itemId,
-                ],
-            ]);
-            $affiliate = json_decode($affRes->getBody(), true);
-
-            $results[] = [
-                'title'        => $detail['data']['title'] ?? '',
-                'rating_star'  => $rating['data']['item_rating_summary']['rating_star'] ?? 0,
-                'product_link' => "https://shopee.co.id/product/{$shopId}/{$itemId}",
-                'commission'   => $affiliate['data']['commission_rate'] ?? null,
-                'shortlink'    => $affiliate['data']['short_link'] ?? null,
-            ];
-        }
-
-        return $results;
     }
 }

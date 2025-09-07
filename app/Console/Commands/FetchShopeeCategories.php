@@ -66,19 +66,23 @@ class FetchShopeeCategories extends Command
     {
         foreach ($categories as $cat) {
             $catid = $cat['catid'] ?? null;
-            $name = $cat['name'] ?? null;
             $displayName = $cat['display_name'] ?? null;
 
             if ($catid) {
-                // Simpan atau update kategori ke database
-                Category::updateOrCreate(
+                // 1. Simpan kategori
+                $category = Category::updateOrCreate(
                     ['catid' => $catid],
-                    [
-                        'name' => $name,
-                        'display_name' => $displayName,
-                        'parent_catid' => $parentCatId
-                    ]
+                    ['display_name' => $displayName]
                 );
+
+                // 2. Kalau ada parent_catid, update parent_id
+                if ($parentCatId) {
+                    $parent = Category::where('catid', $parentCatId)->first();
+                    if ($parent) {
+                        $category->parent_id = $parent->id;
+                        $category->save();
+                    }
+                }
             }
 
             $this->line("{$prefix}ID: {$catid} | Name: {$displayName}");
