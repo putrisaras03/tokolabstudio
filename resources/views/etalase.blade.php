@@ -52,7 +52,7 @@
         </a>
       </div>
     </div>
-
+    
   <!-- Akun Cards -->
 <div class="rekomendasi-etalase">
   <div class="etalase-header">
@@ -62,36 +62,36 @@
     </button>
   </div>
 
-<div class="akun-grid" id="akunGrid">
-  @foreach ($liveAccounts as $index => $akun)
-    <div class="akun-card">
-      <div class="card-overlay"></div>
-      <div class="akun-header">
-        <div class="akun-number">{{ $index + 1 }}</div>
-        <div class="akun-info-center">
-          <div class="akun-info-wrapper">
-            <p class="akun-nama">{{ '@' . $akun->name }}</p>
-            <p class="akun-studio">{{ $akun->studio->name ?? 'Tanpa Studio' }}</p>
-          </div>
-        <div class="akun-dropdown">
-            <span class="more-icon" onclick="toggleDropdown(this)">⋮</span>
-            <div class="dropdown-menu">
-              <button onclick="editAkun({{ $akun->id }}, '{{ $akun->name }}', '{{ $akun->studio_id }}')">
-                <span class="dropdown-icon"><i class="fa-solid fa-pen-to-square"></i></span>
-                <span>Edit</span>
-              </button>
-              <form action="{{ route('live-accounts.destroy', $akun->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit">
-                  <span class="dropdown-icon"><i class="fa-solid fa-trash-can"></i></span>
-                  <span>Hapus</span>
-                </button>
-              </form>
-            </div>
-          </div>
+  <div class="akun-grid" id="akunGrid">
+  @foreach ($liveAccounts as $index => $akun)  
+  <div class="akun-card">
+    <div class="card-overlay"></div>
+    <div class="akun-header">
+      <div class="akun-number">{{ $index + 1 }}</div>
+      <div class="akun-info-center">
+        <div class="akun-info-wrapper">
+        <p class="akun-nama">{{ '@' . $akun->name }}</p>
+        <p class="akun-studio">{{ $akun->studio->name ?? 'Tanpa Studio' }}</p>
         </div>
-      </div>
+        <div class="akun-dropdown">
+  <span class="more-icon" onclick="toggleDropdown(this)">⋮</span>
+  <div class="dropdown-menu">
+    <button onclick="editAkun(this, {{ $akun->id }}, '{{ $akun->name }}', '{{ $akun->studio_id }}')">
+      <span class="dropdown-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+      <span>Edit</span>
+    </button>
+    <form action="{{ route('live-accounts.destroy', $akun->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
+      @csrf
+      @method('DELETE')
+      <button type="submit">
+      <span class="dropdown-icon"><i class="fa-solid fa-trash-can"></i></span>
+      <span>Hapus</span>
+    </button>
+    </form>
+    </div>
+    </div>
+    </div>
+    </div>
 
       <div class="akun-stats">
         <div><h3>100</h3><p>Produk</p></div>
@@ -109,8 +109,6 @@
     </div>
   @endforeach
 </div>
-   
-
   <!-- Pagination -->
   <div class="pagination" id="pagination"></div>
 
@@ -127,30 +125,27 @@
     <h3>Tambah Akun Baru</h3>
     <p>Lengkapi Formulir Ini !</p>
 
-    <!-- Form start -->
     <form action="{{ route('live-accounts.store') }}" method="POST">
-      @csrf
-
-      <div class="modal-form">
-        <div class="input-group">
-          <i class="fa-solid fa-user"></i>
-          <input type="text" name="name" placeholder="Masukkan Nama Akun" required />
-        </div>
-
-        <div class="input-group">
-          <i class="fa-solid fa-building"></i>
-          <select name="studio_id" required>
-            <option disabled selected>Pilih Studio</option>
-            @foreach ($studios as $studio)
-              <option value="{{ $studio->id }}">{{ $studio->name }}</option>
-            @endforeach
-          </select>
-        </div>
-
-        <button class="btn-modal-submit" type="submit">Tambah Akun</button>
-      </div>
-    </form>
-    <!-- Form end -->
+  @csrf
+  <div class="modal-form">
+    <div class="input-group">
+      <i class="fa-solid fa-user"></i>
+      <input type="text" name="name" placeholder="Masukkan Nama Akun" required />
+    </div>
+    <div class="input-group">
+      <i class="fa-solid fa-building"></i>
+      <select name="studio_id" required>
+        <option disabled selected>Pilih Studio</option>
+        @foreach ($studios as $studio)
+          <option value="{{ $studio->id }}">{{ $studio->name }}</option>
+        @endforeach
+      </select>
+    </div>
+    <button type="submit" class="btn-modal-submit">Tambah Akun</button>
+  </div>
+</form>
+  </div>
+</div>
 
 <!-- Modal Edit Akun -->
 <!-- Modal Edit Akun -->
@@ -165,50 +160,60 @@
     <h3>Edit Akun</h3>
     <p>Perbarui informasi akun</p>
 
-    <form id="editForm" method="POST">
-    @csrf
-    @method('PUT') <!-- penting untuk PATCH/PUT method -->
+    <form action="/akun/update" method="POST">
+      
+      <!-- Input Nama Akun dengan ikon -->
+      <div class="form-group">
+        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+        <input
+          type="text"
+          id="edit-nama-akun"
+          name="nama_akun"
+          placeholder="Masukkan Nama Akun"
+          required
+        >
+      </div>
 
-    <input type="hidden" id="edit-id" name="id"> <!-- diset via JS -->
+      <!-- Dropdown Studio dengan ikon -->
+      <div class="form-group">
+        <span class="input-icon"><i class="fa-solid fa-building"></i></span>
+        <select id="edit-studio" name="studio_id" required>
+              <option disabled selected>Pilih Studio</option>
+            @foreach ($studios as $studio)
+              <option value="{{ $studio->id }}">{{ $studio->name }}</option>
+            @endforeach
+          </select>
+        </div>
 
-    <div class="form-group">
-      <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-      <input type="text" id="edit-nama-akun" name="name" placeholder="Masukkan Nama Akun" required>
-    </div>
-
-    <div class="form-group">
-      <span class="input-icon"><i class="fa-solid fa-building"></i></span>
-      <select id="edit-studio" name="studio_id" required>
-        <option value="">-- Pilih Studio --</option>
-        @foreach ($studios as $studio)
-          <option value="{{ $studio->id }}">{{ $studio->name }}</option>
-        @endforeach
-      </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-  </form>
+      <!-- Tombol Simpan -->
+      <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    </form>
 
     <!-- Tombol tutup -->
     <button class="btn-close" onclick="closeEditModal()">×</button>
+
   </div>
 </div>
 
+
+
 <!-- JavaScript Modal -->
  <script>
-  function editAkun(id, name, studioId) {
-    document.getElementById('edit-id').value = id;
-    document.getElementById('edit-nama-akun').value = name;
-    document.getElementById('edit-studio').value = studioId;
+  function editAkun(button) {
+    const card = button.closest('.akun-card');
+    const namaAkun = card.querySelector('.akun-nama')?.textContent.trim();
+    const studioText = card.querySelector('.akun-studio')?.textContent.trim();
+    const studioId = studioText?.match(/\d+/)?.[0] || '';
 
-    const editForm = document.getElementById('editForm');
-    editForm.action = `/live-accounts/${id}`;
+    document.getElementById('edit-nama-akun').value = namaAkun || '';
+    document.getElementById('edit-studio').value = studioId || '';
 
     openEditModal(); // Panggil open modal, dia akan tutup semua dropdown juga
   }
 
   function openEditModal() {
     document.getElementById('editModal').style.display = 'flex';
+    closeAllDropdown(); // Pastikan semua dropdown tertutup
   }
 
   function closeEditModal() {

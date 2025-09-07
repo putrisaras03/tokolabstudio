@@ -12,20 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id()->primary(); // ID otomatis
-            $table->text('image_url')->nullable(); // URL gambar produk
-            $table->text('name');
-            $table->bigInteger('price');
-            $table->text('total_sales')->nullable(); // total penjualan produk
-            $table->decimal('rating', 2, 1)->nullable();
-            $table->bigInteger('commission')->nullable(); // komisi Shopee (dalam % atau nominal)
-            $table->integer('product_age_month')->nullable(); // umur produk (dalam hari)
-            $table->bigInteger('avg_monthly_sales')->nullable(); // penjualan rata-rata per bulan
-            $table->bigInteger('sales_last_30_days')->nullable(); // penjualan 30 hari terakhir
-            $table->bigInteger('review_count')->nullable();
-            $table->integer('stock')->nullable();
-            $table->decimal('sales_trend', 6, 2)->nullable(); // tren penjualan (%)
-            $table->text('product_url')->nullable(); // link ke produk Shopee
+            $table->id();
+            $table->string('title');
+            $table->decimal('rating_star', 3, 2)->nullable();
+            $table->string('product_link')->nullable();
+            $table->decimal('commission', 8, 2)->nullable();
             $table->timestamps();
         });
     }

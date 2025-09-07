@@ -288,6 +288,10 @@ body {
   pointer-events: none;
   z-index: 5;
 }
+.akun-card.overlay {
+  background-color: rgba(0, 0, 0, 0.05); /* atau warna gelap transparan */
+  transition: background-color 0.2s ease;
+}
 
 .akun-card.overlay .card-overlay {
   opacity: 1;

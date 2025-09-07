@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id(); // auto-increment primary key
+            $table->bigInteger('catid')->unique(); // ID Shopee, wajib
+            $table->string('display_name')->nullable();
+            $table->bigInteger('parent_catid')->nullable(); // parent ID
             $table->timestamps();
         });
     }

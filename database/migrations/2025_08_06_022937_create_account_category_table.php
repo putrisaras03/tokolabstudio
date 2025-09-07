@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('account_category', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('live_account_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->primary(['live_account_id', 'category_id']); // primary key composite
+            $table->timestamps(); // opsional
         });
     }
 

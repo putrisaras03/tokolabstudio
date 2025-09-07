@@ -8,6 +8,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LiveAccountController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LiveAccountCategoryController;
+
 
 // Route utama login
 Route::get('/', function () {
@@ -42,22 +45,11 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/etalase', [LiveAccountController::class, 'index'])->middleware('auth')->name('etalase');
-// Menampilkan daftar akun live (halaman utama)
 Route::get('/live-accounts', [LiveAccountController::class, 'index'])->name('live-accounts.index');
-
-// Menampilkan form tambah akun live
 Route::get('/live-accounts/create', [LiveAccountController::class, 'create'])->name('live-accounts.create');
-
-// Menyimpan akun live baru
 Route::post('/live-accounts', [LiveAccountController::class, 'store'])->name('live-accounts.store');
-
-// Menampilkan form edit akun live
 Route::get('/live-accounts/{id}/edit', [LiveAccountController::class, 'edit'])->name('live-accounts.edit');
-
-// Memperbarui data akun live
 Route::put('/live-accounts/{id}', [LiveAccountController::class, 'update'])->name('live-accounts.update');
-
-// Menghapus akun live
 Route::delete('/live-accounts/{id}', [LiveAccountController::class, 'destroy'])->name('live-accounts.destroy');
 
 Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
@@ -66,9 +58,15 @@ Route::get('/schedule', function () {
     return view('schedule');
 });
 
-Route::get('/kategori', function () {
-    return view('kategori');
-});
+Route::get('/kategori', [CategoryController::class, 'index']);
+// Tampilkan halaman atur kategori untuk 1 akun live
+Route::get('/live_accounts/{liveAccountId}/categories/edit', [LiveAccountCategoryController::class, 'editCategories'])->name('live_accounts.categories.edit');
+// Update kategori (tambah/hapus sekaligus)
+Route::put('/live_accounts/{id}/categories', [LiveAccountController::class, 'updateCategories'])
+    ->name('live_accounts.update_categories');
+// Hapus kategori tertentu dari akun live (AJAX atau tombol hapus langsung)
+Route::delete('/live_accounts/{liveAccountId}/categories/{categoryId}', [LiveAccountController::class, 'destroyCategory'])
+    ->name('live_accounts.destroy_category');
 
 // Route untuk membuka modal lupa password via session
 Route::post('/modal/forgot-password', function () {

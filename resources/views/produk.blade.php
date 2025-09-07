@@ -41,14 +41,17 @@
   <div class="navbar">
     <div class="nav-title">Rekomendasi Produk</div>
 
-    <div class="user-area">
-      <!-- Hi, Welda dan avatar saja -->
-      <div class="greetingg">Hi, Welda!</div>
-      <div class="avatar">
-        <img src="/assets/img/profil.jpg" alt="Profil" />
+  <div class="user-area">
+        <!-- Hi, Welda dan avatar saja -->
+        <div class="greetingg">Hi, {{ auth()->user()->username ?? auth()->user()->name }}!</div>
+          <a href="{{ route('profile') }}">
+            <div class="avatar" style="cursor: pointer;">
+              <img src="{{ auth()->user()->img_profile ? asset('img_profiles/' . auth()->user()->img_profile) : asset('assets/img/profil.jpg') }}" 
+                  alt="Profil" />
+          </div>
+        </a>
       </div>
     </div>
-  </div>
 
  <!-- Halaman Produk -->
 <div class="halaman-produk-container">
@@ -57,30 +60,9 @@
     <div class="dropdown-group">
       <select class="filter-select">
         <option disabled selected>Pilih Kategori</option>
-<option value="aksesori_fashion">Aksesori Fashion</option>
-<option value="buku_alat_tulis">Buku & Alat Tulis</option>
-<option value="elektronik">Elektronik</option>
-<option value="fashion_bayi_anak">Fashion Bayi & Anak</option>
-<option value="fashion_muslim">Fashion Muslim</option>
-<option value="fotografi">Fotografi</option>
-<option value="handphone_aksesoris">Handphone & Aksesoris</option>
-<option value="hobi_koleksi">Hobi & Koleksi</option>
-<option value="ibu_bayi">Ibu & Bayi</option>
-<option value="jam_tangan">Jam Tangan</option>
-<option value="kesehatan">Kesehatan</option>
-<option value="komputer_aksesoris">Komputer & Aksesoris</option>
-<option value="makanan_minuman">Makanan & Minuman</option>
-<option value="olahraga_outdoor">Olahraga & Outdoor</option>
-<option value="otomotif">Otomotif</option>
-<option value="pakaian_pria">Pakaian Pria</option>
-<option value="pakaian_wanita">Pakaian Wanita</option>
-<option value="perawatan_tubuh">Perawatan & Kecantikan</option>
-<option value="perlengkapan_rumah">Perlengkapan Rumah</option>
-<option value="sepatu_pria">Sepatu Pria</option>
-<option value="sepatu_wanita">Sepatu Wanita</option>
-<option value="tas_wanita">Tas Wanita</option>
-<option value="tas_pria">Tas Pria</option>
-<option value="perhiasan_aksesoris">Perhiasan & Aksesori</option>
+        @foreach ($categories as $category)
+          <option value="{{ $category->slug }}">{{ $category->name }}</option>
+        @endforeach
       </select>
       <select class="sort-select">
         <option disabled selected>Urutkan</option>
@@ -115,6 +97,13 @@
 </div>
 
   <!-- Tambahkan produk lain di sini -->
+</div>
+
+<!-- Tombol Buat Link Masal -->
+<div class="buat-link-container">
+  <button class="btn-buat-link">
+    <i class="fa-solid fa-circle-plus"></i> Buat Link masal
+  </button>
 </div>
 
 <div class="pagination-wrapper" id="paginationBottom"></div>
