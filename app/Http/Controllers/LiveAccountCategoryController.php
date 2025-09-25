@@ -36,10 +36,12 @@ class LiveAccountCategoryController extends Controller
     {
         $liveAccount = LiveAccount::findOrFail($liveAccountId);
 
-        // simpan kategori terpilih ke pivot
+        // Simpan kategori terpilih ke pivot
         $liveAccount->categories()->sync($request->categories ?? []);
 
-        return redirect()->route('live-accounts.index')->with('success', 'Kategori berhasil diperbarui!');
+        return redirect()
+            ->route('live_accounts.categories.edit', $liveAccount->id)
+            ->with('success', 'Kategori berhasil diperbarui!');
     }
     
     // Hapus kategori dari akun
