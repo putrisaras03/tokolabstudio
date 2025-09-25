@@ -59,152 +59,119 @@
   </button>
 </div>
 
-<div class="kategori-wrapper">
-    <div class="kategori-header">
-    <h3>Kategori saat ini</h3>
-    <button class="btn-simpan">
-      <i class="fa-solid fa-save"></i> Simpan
-      </button>
-  </div>
-  <div class="kategori-saat-ini">
-    @if(isset($liveAccount) && $liveAccount)
-      <form id="formKategori" method="POST" action="{{ route('live_accounts.categories.update', $liveAccount->id) }}">
-        @csrf
-        @method('PUT')
+  <div class="kategori-wrapper">
+        <form id="formKategori" method="POST" action="{{ route('live_accounts.categories.update', $liveAccount->id) }}">
+          @csrf
+          @method('PUT')
 
-        <div id="kategoriTerpilihContainer">
-          @forelse ($liveAccount->categories as $kategori)
-            <div class="kategori-box" data-id="{{ $kategori->id }}">
-              <div class="left" style="display:flex; align-items:center; gap:8px;">
-                @if(!empty($kategori->icon_url))
-                  <img src="{{ $kategori->icon_url }}" alt="{{ $kategori->name }}" style="width:24px; height:24px; object-fit:contain;">
-                @else
-                  <span style="width:24px; height:24px; display:inline-block; background:#ccc;"></span>
-                @endif
-                <span>{{ $kategori->name }}</span>
-              </div>
+          <div class="kategori-header">
+            <h3>Kategori saat ini</h3>
+            <button type="submit" class="btn-simpan">
+              <i class="fa-solid fa-save"></i> Simpan
+            </button>
+          </div>
 
-              <form method="POST" action="{{ route('live_accounts.categories.destroy', ['liveAccountId' => $liveAccount->id, 'categoryId' => $kategori->id]) }}" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="hapus-btn" onclick="return confirm('Yakin ingin menghapus kategori ini?')" style="background:none; border:none; cursor:pointer;">
-                  <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="hapus" style="width:20px; height:20px;">
-                </button>
-              </form>
+          <div class="kategori-saat-ini" id="kategoriTerpilihContainer">
+            @forelse ($selectedCategories as $kategori)
+                <div class="kategori-box" data-id="{{ $kategori->id }}">
+                    <div class="left" style="display:flex; align-items:center; gap:8px;">
+                        <span>{{ $kategori->display_name }}</span>
+                    </div>
+                    <button type="button" class="hapus-btn"
+                            onclick="hapusKategori({{ $liveAccount->id }}, {{ $kategori->id }})"
+                            style="background:none; border:none; cursor:pointer;">
+                        <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="hapus" style="width:20px; height:20px;">
+                    </button>
+                    <input type="hidden" name="categories[]" value="{{ $kategori->id }}">
+                </div>
+            @empty
+                <p>Anda belum memilih Kategori</p>
+            @endforelse
+        </div>
+    </form>
 
-              <input type="hidden" name="categories[]" value="{{ $kategori->id }}">
+        <!-- Form hapus kategori (hidden) -->
+        <form id="formHapusKategori" method="POST" style="display:none;">
+          @csrf
+          @method('DELETE')
+        </form>
+
+        <h3 class="kategori-title">Kategori Tersedia</h3>
+        <div class="kategori-tersedia">
+          @forelse ($availableCategories as $category)
+            <div class="kategori-item" data-id="{{ $category->id }}">
+              <span>{{ $category->display_name }}</span>
             </div>
           @empty
-            <p>Anda belum memilih Kategori</p>
+            <p>Tidak ada kategori tersedia</p>
           @endforelse
         </div>
-      </form>
-    @else
-      <p>Anda belum memilih Kategori</p>
-    @endif
-  </div>
-</div>
-
-
-  <div class="kategori-tersedia">
-  <h3 class="kategori-title">kategori tersedia</h3>
-  <h3></h3>
-   <h3></h3>
-  @foreach ($categories as $category)
-    <div class="kategori-item">
-      <img src="{{ $category->icon_url }}" alt="{{ $category->name }}">
-      <span>{{ $category->name }}</span>
+      </div>
     </div>
-  @endforeach
-</div>
-  
-</div>
+  </div>
+
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const kategoriSaatIniContainer = document.querySelector(".kategori-saat-ini");
+document.addEventListener("DOMContentLoaded", function () {
+  const kategoriSaatIniContainer = document.querySelector(".kategori-saat-ini");
+  const kategoriTersediaContainer = document.querySelector(".kategori-tersedia");
 
-    document.querySelectorAll(".kategori-item").forEach(item => {
-      item.addEventListener("click", function () {
-        const imgSrc = item.querySelector("img").src;
-        const altText = item.querySelector("img").alt;
-        const labelText = item.querySelector("span").innerText;
+  // Tambahkan kategori dari daftar tersedia ke daftar saat ini
+  kategoriTersediaContainer.querySelectorAll(".kategori-item").forEach(item => {
+    item.addEventListener("click", function () {
+      const labelText = item.querySelector("span").innerText;
 
-        // Cek apakah sudah ada di kategori saat ini
-        const sudahAda = [...document.querySelectorAll(".kategori-saat-ini .kategori-box span")]
-          .some(span => span.innerText === labelText);
-        if (sudahAda) return;
+      // Cek apakah sudah ada
+      const sudahAda = [...kategoriSaatIniContainer.querySelectorAll(".kategori-box span")]
+        .some(span => span.innerText === labelText);
+      if (sudahAda) return;
 
-        // Hapus dulu teks "Anda belum memilih Kategori" jika ada
-        const pesanKosong = kategoriSaatIniContainer.querySelector("p");
-        if (pesanKosong) {
-          pesanKosong.remove();
-        }
-        // Buat elemen baru
-        const newKategoriBox = document.createElement("div");
-        newKategoriBox.className = "kategori-box";
+      // Hapus teks kosong
+      const pesanKosong = kategoriSaatIniContainer.querySelector("p");
+      if (pesanKosong) pesanKosong.remove();
 
-        newKategoriBox.innerHTML = `
-          <div class="left">
-            <img src="${imgSrc}" alt="${altText}">
-            <span>${labelText}</span>
-          </div>
-          <button class="hapus-btn">
-            <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="hapus">
-          </button>
-        `;
+      // Buat box baru
+      const newKategoriBox = document.createElement("div");
+      newKategoriBox.className = "kategori-box";
+      newKategoriBox.innerHTML = `
+        <div class="left">
+          <span>${labelText}</span>
+        </div>
+        <button class="hapus-btn" type="button">
+          <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="hapus">
+        </button>
+        <input type="hidden" name="categories[]" value="${item.dataset.id}">
+      `;
 
-        kategoriSaatIniContainer.appendChild(newKategoriBox);
+      kategoriSaatIniContainer.appendChild(newKategoriBox);
+      item.remove();
 
-        // Hapus dari kategori tersedia
-        item.remove();
-
-        // Tambahkan event ke tombol hapus
-        newKategoriBox.querySelector(".hapus-btn").addEventListener("click", function () {
-        // Buat kembali kategori-item dan masukkan ke bawah
+      // Event hapus -> balikin ke daftar tersedia
+      newKategoriBox.querySelector(".hapus-btn").addEventListener("click", function () {
         const newItem = document.createElement("div");
         newItem.className = "kategori-item";
-        newItem.innerHTML = `
-          <img src="${imgSrc}" alt="${altText}">
-          <span>${labelText}</span>
-        `;
-        // Tambah event klik ke elemen baru
+        newItem.dataset.id = item.dataset.id;
+        newItem.innerHTML = `<span>${labelText}</span>`;
         newItem.addEventListener("click", arguments.callee);
-        document.querySelector(".kategori-tersedia").appendChild(newItem);
+        kategoriTersediaContainer.appendChild(newItem);
 
-        // Hapus kategori dari kategori saat ini
         newKategoriBox.remove();
 
-        // Jika tidak ada kategori tersisa di kategori-saat-ini selain <h3>, tampilkan pesan kosong
         if (kategoriSaatIniContainer.querySelectorAll(".kategori-box").length === 0) {
           const pesanKosong = document.createElement("p");
           pesanKosong.textContent = "Anda belum memilih Kategori";
           kategoriSaatIniContainer.appendChild(pesanKosong);
         }
-        });
       });
     });
   });
+});
 
-  function updateKategoriDisplay(kategori) {
-  const container = document.querySelector('.kategori-saat-ini');
-  if (kategori) {
-    container.innerHTML = `
-      <h3>Kategori saat ini</h3>
-      <div class="kategori-box">
-        <div class="left">
-          <img src="${kategori.icon}" alt="${kategori.nama}">
-          <span>${kategori.nama}</span>
-        </div>
-        <button class="hapus-btn">
-          <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="hapus">
-        </button>
-      </div>
-    `;
-  } else {
-    container.innerHTML = `
-      <h3>Kategori saat ini</h3>
-      <p>Anda belum memilih Kategori</p>
-    `;
-  }
+function hapusKategori(liveAccountId, categoryId) {
+  if (!confirm("Yakin ingin menghapus kategori ini?")) return;
+  let form = document.getElementById("formHapusKategori");
+  form.action = `/live-accounts/${liveAccountId}/categories/${categoryId}`;
+  form.submit();
 }
 </script>
+</body>
+</html>

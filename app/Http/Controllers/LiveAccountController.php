@@ -71,7 +71,8 @@ class LiveAccountController extends Controller
             'studio_id' => $request->studio_id,
         ]);
 
-        return redirect()->route('live-accounts.index')->with('success', 'Akun live berhasil diperbarui!');
+        // Balik ke halaman etalase dengan data terbaru
+        return redirect()->back()->with('success', 'Akun live berhasil diperbarui!');
     }
 
     /**

@@ -58,15 +58,15 @@ Route::get('/schedule', function () {
     return view('schedule');
 });
 
-Route::get('/kategori', [CategoryController::class, 'index']);
-// Tampilkan halaman atur kategori untuk 1 akun live
-Route::get('/live_accounts/{liveAccountId}/categories/edit', [LiveAccountCategoryController::class, 'editCategories'])->name('live_accounts.categories.edit');
-// Update kategori (tambah/hapus sekaligus)
-Route::put('/live_accounts/{id}/categories', [LiveAccountController::class, 'updateCategories'])
-    ->name('live_accounts.update_categories');
-// Hapus kategori tertentu dari akun live (AJAX atau tombol hapus langsung)
-Route::delete('/live_accounts/{liveAccountId}/categories/{categoryId}', [LiveAccountController::class, 'destroyCategory'])
-    ->name('live_accounts.destroy_category');
+Route::get('/live-accounts/{liveAccount}/categories', [LiveAccountCategoryController::class, 'edit'])
+    ->name('live_accounts.categories.edit');
+
+Route::put('/live-accounts/{liveAccount}/categories', [LiveAccountCategoryController::class, 'update'])
+    ->name('live_accounts.categories.update');
+
+Route::delete('/live-accounts/{liveAccount}/categories/{categoryId}', [LiveAccountCategoryController::class, 'destroy'])
+    ->name('live_accounts.categories.destroy');
+
 
 // Route untuk membuka modal lupa password via session
 Route::post('/modal/forgot-password', function () {

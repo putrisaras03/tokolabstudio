@@ -95,11 +95,14 @@
 
       <div class="akun-stats">
         <div><h3>100</h3><p>Produk</p></div>
-        <div><h3>7</h3><p>Kategori</p></div>
+      <div>
+        <h3>{{ $akun->categories->count() }}</h3>
+        <p>Kategori</p>
+      </div>
       </div>
 
       <div class="akun-btns">
-        <a href="{{ url('kategori') }}" class="btn-atur">
+        <a href="{{ route('live_accounts.categories.edit', $akun->id) }}" class="btn-atur">
           <i class="fa-solid fa-gear"></i> Atur Kategori
         </a>
         <a href="{{ url('produk') }}" class="btn-lihat">
@@ -148,7 +151,6 @@
 </div>
 
 <!-- Modal Edit Akun -->
-<!-- Modal Edit Akun -->
 <div class="edit-modal-overlay" id="editModal">
   <div class="edit-modal">
     
@@ -160,30 +162,32 @@
     <h3>Edit Akun</h3>
     <p>Perbarui informasi akun</p>
 
-    <form action="/akun/update" method="POST">
+    <form id="editForm" method="POST">
+      @csrf
+      @method('PUT')
       
-      <!-- Input Nama Akun dengan ikon -->
+      <!-- Input Nama Akun -->
       <div class="form-group">
         <span class="input-icon"><i class="fa-solid fa-user"></i></span>
         <input
           type="text"
           id="edit-nama-akun"
-          name="nama_akun"
+          name="name"
           placeholder="Masukkan Nama Akun"
           required
         >
       </div>
 
-      <!-- Dropdown Studio dengan ikon -->
+      <!-- Dropdown Studio -->
       <div class="form-group">
         <span class="input-icon"><i class="fa-solid fa-building"></i></span>
         <select id="edit-studio" name="studio_id" required>
-              <option disabled selected>Pilih Studio</option>
-            @foreach ($studios as $studio)
-              <option value="{{ $studio->id }}">{{ $studio->name }}</option>
-            @endforeach
-          </select>
-        </div>
+          <option disabled selected>Pilih Studio</option>
+          @foreach ($studios as $studio)
+            <option value="{{ $studio->id }}">{{ $studio->name }}</option>
+          @endforeach
+        </select>
+      </div>
 
       <!-- Tombol Simpan -->
       <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -191,7 +195,6 @@
 
     <!-- Tombol tutup -->
     <button class="btn-close" onclick="closeEditModal()">×</button>
-
   </div>
 </div>
 
@@ -199,16 +202,16 @@
 
 <!-- JavaScript Modal -->
  <script>
-  function editAkun(button) {
-    const card = button.closest('.akun-card');
-    const namaAkun = card.querySelector('.akun-nama')?.textContent.trim();
-    const studioText = card.querySelector('.akun-studio')?.textContent.trim();
-    const studioId = studioText?.match(/\d+/)?.[0] || '';
+  function editAkun(button, id, name, studioId) {
+      // isi data ke input
+      document.getElementById('edit-nama-akun').value = name;
+      document.getElementById('edit-studio').value = studioId;
 
-    document.getElementById('edit-nama-akun').value = namaAkun || '';
-    document.getElementById('edit-studio').value = studioId || '';
+      // set action form ke /live-accounts/{id}
+      const form = document.getElementById('editForm');
+      form.action = `/live-accounts/${id}`;
 
-    openEditModal(); // Panggil open modal, dia akan tutup semua dropdown juga
+      openEditModal();
   }
 
   function openEditModal() {

@@ -6,24 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('account_category', function (Blueprint $table) {
+        Schema::create('live_account_category', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('live_account_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+
+            $table->unsignedBigInteger('live_account_id');
+            $table->unsignedBigInteger('category_id');
+
+            $table->foreign('live_account_id')
+                ->references('id')->on('live_accounts')
+                ->onDelete('cascade');
+
+            $table->foreign('category_id')
+                ->references('id')->on('categories')
+                ->onDelete('cascade');
+
             $table->timestamps();
+
+            $table->unique(['live_account_id', 'category_id']); // supaya tidak duplikat
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('account_category');
+        Schema::dropIfExists('live_account_category');
     }
 };

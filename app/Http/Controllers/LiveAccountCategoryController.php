@@ -8,37 +8,49 @@ use Illuminate\Http\Request;
 
 class LiveAccountCategoryController extends Controller
 {
-    /**
-     * Tampilkan form untuk atur kategori akun live
-     */
-    public function editCategories($liveAccountId)
+    // Tampilkan halaman atur kategori
+    public function edit($liveAccountId)
     {
-        $liveAccount= LiveAccount::with('categories')->findOrFail($liveAccountId);
-        $categories = Category::all();
+        $liveAccount = LiveAccount::with('categories')->findOrFail($liveAccountId);
 
-        return view('kategori', compact('liveAccount', 'categories'));
+        // id kategori yang sudah dipilih akun ini
+        $selectedCategoryIds = $liveAccount->categories->pluck('id');
+
+        // kategori yang sudah dipilih
+        $selectedCategories = $liveAccount->categories;
+
+        // kategori tersedia (belum dipilih, parent_id null)
+        $availableCategories = Category::whereNull('parent_id')
+            ->whereNotIn('id', $selectedCategoryIds)
+            ->get();
+
+        return view('kategori', [
+            'liveAccount'         => $liveAccount,
+            'selectedCategories'  => $selectedCategories,
+            'availableCategories' => $availableCategories,
+        ]);
     }
 
-    public function updateCategories(Request $request, $liveAccountId)
+    // Simpan kategori yang dipilih
+    public function update(Request $request, $liveAccountId)
     {
         $liveAccount = LiveAccount::findOrFail($liveAccountId);
 
-        $selectedCategories = $request->input('categories', []); // array kategori yang dipilih
+        // simpan kategori terpilih ke pivot
+        $liveAccount->categories()->sync($request->categories ?? []);
 
-        // Sync relasi many-to-many
-        $liveAccount->categories()->sync($selectedCategories);
-
-        return redirect()->route('live_accounts.index')->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->route('live-accounts.index')->with('success', 'Kategori berhasil diperbarui!');
     }
-
-    public function destroyCategory($liveAccountId, $categoryId)
+    
+    // Hapus kategori dari akun
+    public function destroy($liveAccountId, $categoryId)
     {
         $liveAccount = LiveAccount::findOrFail($liveAccountId);
 
-        // Lepas relasi kategori dengan akun live
         $liveAccount->categories()->detach($categoryId);
 
-        return redirect()->back()->with('success', 'Kategori berhasil dihapus dari akun live.');
+        return redirect()
+            ->route('live_accounts.categories.edit', $liveAccount->id)
+            ->with('success', 'Kategori berhasil dihapus');
     }
-
 }
