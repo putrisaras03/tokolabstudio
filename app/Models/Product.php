@@ -79,7 +79,16 @@ class Product extends Model
     public function getSoldFormattedAttribute()
     {
         $sold = $this->historical_sold ?? $this->total_sales ?? 0;
-        return number_format($sold, 0, ',', '.') . ' terjual';
+
+        if ($sold >= 1000000) {
+            // Jika jutaan → tampil "x,x jt"
+            return number_format($sold / 1000000, 1, ',', '.') . ' jt terjual';
+        } elseif ($sold >= 1000) {
+            // Jika ribuan → tampil "xxxk"
+            return number_format($sold / 1000, 0, ',', '.') . 'k terjual';
+        }
+
+        return $sold . ' terjual';
     }
 
 }
