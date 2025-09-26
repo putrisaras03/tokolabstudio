@@ -10,7 +10,12 @@ return new class extends Migration
     {
         Schema::create('product_metadata', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            // product_id mengacu ke products.item_id
+            $table->unsignedBigInteger('product_id');
+            $table->foreign('product_id')
+                ->references('item_id')
+                ->on('products')
+                ->onDelete('cascade');
 
             // Ringkasan Penjualan
             $table->integer('penjualan_total')->default(0);

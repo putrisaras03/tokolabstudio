@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function index()
     {
         // Ambil produk terbaru dengan relasi category, models, metadata
-        $products = Product::with(['category', 'models', 'metadata'])
+        $products = Product::with(['category', 'metadata'])
             ->latest()
             ->paginate(18);
 
@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function show($id)
     {
         // Ambil 1 produk lengkap dengan relasi
-        $product = Product::with(['category', 'models', 'metadata'])->findOrFail($id);
+        $product = Product::with(['category', 'metadata'])->findOrFail($id);
 
         $user = Auth::user();
 
