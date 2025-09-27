@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LiveAccountController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LiveAccountCategoryController;
+use App\Http\Controllers\ProductMetadataController;
 
 
 // Route utama login
@@ -53,6 +54,7 @@ Route::put('/live-accounts/{id}', [LiveAccountController::class, 'update'])->nam
 Route::delete('/live-accounts/{id}', [LiveAccountController::class, 'destroy'])->name('live-accounts.destroy');
 
 Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
+Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
 
 Route::get('/schedule', function () {
     return view('schedule');
@@ -80,3 +82,7 @@ Route::get('/forgot-password/reset', function () {
     session(['show_modal' => true]);
     return redirect()->route('login');
 })->name('modal.forgot-password.reset');
+
+Route::get('/detail', function () {
+    return view('detail'); // file resources/views/detail.blade.php
+})->name('detail');

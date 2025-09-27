@@ -38,7 +38,7 @@ class Product extends Model
      */
     public function metadata()
     {
-        return $this->hasOne(ProductMetadata::class);
+        return $this->hasOne(ProductMetadata::class, 'product_id', 'item_id');
     }
 
     /**

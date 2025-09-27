@@ -26,11 +26,15 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        // Ambil 1 produk lengkap dengan relasi
-        $product = Product::with(['category', 'metadata'])->findOrFail($id);
+        $product = Product::with(['category', 'metadata'])
+            ->where('item_id', $id)
+            ->firstOrFail();
+
+        $metadata = $product->metadata; // ambil metadata langsung
 
         $user = Auth::user();
 
-        return view('detail.produk', compact('product', 'user'));
+        return view('detail', compact('product', 'metadata', 'user'));
     }
+
 }
