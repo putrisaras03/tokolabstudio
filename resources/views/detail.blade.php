@@ -121,6 +121,20 @@
                             </div>
                             <p class="text-sm text-gray-600">Terjual</p>
                         </div>
+
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-purple-600 mb-2">
+                                {{ number_format($product->stock) }}
+                            </div>
+                            <p class="text-sm text-gray-600">Total Stok</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            📱 Kategori: 
+                            {{ $product->categories->pluck('display_name')->join(' > ') }}
+                        </span>
                     </div>
                     
                     @php
@@ -162,6 +176,42 @@
             </div>
         </div>
 
+        <!-- Informasi Komisi -->
+        @php
+            // Hitung total komisi
+            $totalCommission = $product->seller_commission + $product->shopee_commission;
+        @endphp
+
+        <div class="bg-white rounded-xl card-shadow p-6 mt-8 mb-10">
+            <h3 class="text-xl font-bold text-gray-900 mb-6">💼 Informasi Komisi</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Total Komisi -->
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-blue-600 mb-1">
+                        Rp {{ number_format($totalCommission, 0, ',', '.') }}
+                    </div>
+                    <p class="text-sm text-gray-600">Total Komisi</p>
+                </div>
+
+                <!-- Seller -->
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-green-600 mb-1">
+                        Rp {{ number_format($product->seller_commission, 0, ',', '.') }}
+                    </div>
+                    <p class="text-sm text-gray-600">Seller</p>
+                </div>
+
+                <!-- Shopee -->
+                <div class="bg-orange-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-orange-600 mb-1">
+                        Rp {{ number_format($product->shopee_commission, 0, ',', '.') }}
+                    </div>
+                    <p class="text-sm text-gray-600">Shopee</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Metadata Analytics -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Ringkasan Penjualan -->
@@ -173,22 +223,22 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
                         <span class="text-gray-700">Penjualan Total</span>
-                        <span class="font-bold text-blue-600">45,231 unit</span>
+                        <span class="font-bold text-blue-600">{{ number_format($product->historical_sold) }} unit</span>
                     </div>
                     
-                    <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                        <span class="text-gray-700">Total Varian</span>
-                        <span class="font-bold text-purple-600">127,892 unit</span>
-                    </div>
+                <div class="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                    <span class="text-gray-700">Penjualan Total Varian</span>
+                    <span class="font-bold text-purple-600">{{ $product->formatted_total_sold }} unit</span>
+                </div>
                     
                     <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                         <span class="text-gray-700">Rata-rata/Bulan</span>
-                        <span class="font-bold text-green-600">3,769 unit</span>
+                        <span class="font-bold text-green-600">unit</span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
                         <span class="text-gray-700">Penjualan 30 Hari</span>
-                        <span class="font-bold text-orange-600 trend-up">4,127 unit ↗️</span>
+                        <span class="font-bold text-orange-600 trend-up">unit ↗️</span>
                     </div>
                 </div>
             </div>
@@ -199,30 +249,41 @@
                     💰 Metrik Pendapatan
                 </h3>
                 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center p-3 bg-emerald-50 rounded-lg">
-                        <span class="text-gray-700">Rentang Harga</span>
-                        <span class="font-bold text-emerald-600">8.5M - 12.9M</span>
-                    </div>
+                    @php
+                        $priceMin = $product->price_min / 100000; // sesuaikan skala sesuai DB
+                        $priceMax = $product->price_max / 100000;
+                    @endphp
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-emerald-50 rounded-lg">
+                            <span class="text-gray-700">Rentang Harga</span>
+                            <span class="font-bold text-emerald-600">
+                                @if($priceMin != $priceMax)
+                                    Rp {{ number_format($priceMin, 0, ',', '.') }} - Rp {{ number_format($priceMax, 0, ',', '.') }}
+                                @else
+                                    Rp {{ number_format($priceMin, 0, ',', '.') }}
+                                @endif
+                            </span>
+                        </div>
                     
                     <div class="flex justify-between items-center p-3 bg-indigo-50 rounded-lg">
                         <span class="text-gray-700">Total Pendapatan</span>
-                        <span class="font-bold text-indigo-600">Rp 487.2M</span>
+                        <span class="font-bold text-indigo-600">Rp</span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-pink-50 rounded-lg">
                         <span class="text-gray-700">Omset Varian</span>
-                        <span class="font-bold text-pink-600">Rp 1.38T</span>
+                        <span class="font-bold text-pink-600">Rp</span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-cyan-50 rounded-lg">
                         <span class="text-gray-700">Rata-rata/Bulan</span>
-                        <span class="font-bold text-cyan-600">Rp 40.6M</span>
+                        <span class="font-bold text-cyan-600">Rp</span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
                         <span class="text-gray-700">Pendapatan 30 Hari</span>
-                        <span class="font-bold text-yellow-600 trend-up">Rp 44.5M ↗️</span>
+                        <span class="font-bold text-yellow-600 trend-up">Rp ↗️</span>
                     </div>
                 </div>
             </div>
@@ -233,26 +294,31 @@
                     📋 Detail Produk
                 </h3>
                 
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
-                        <span class="text-gray-700">Tanggal Upload</span>
-                        <span class="font-bold text-slate-600">15 Jan 2023</span>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg">
+                            <span class="text-gray-700">Tanggal Upload</span>
+                            <span class="font-bold text-slate-600">
+                                {{ \Carbon\Carbon::parse($product->ctime)->format('d/m/Y') }}
+                            </span>
+                        </div>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-teal-50 rounded-lg">
                         <span class="text-gray-700">Umur Produk</span>
-                        <span class="font-bold text-teal-600">12 bulan</span>
+                        <span class="font-bold text-teal-600">
+                            {{ ceil(\Carbon\Carbon::parse($product->ctime)->diffInDays(now()) / 30) }} bulan
+                        </span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-violet-50 rounded-lg">
                         <span class="text-gray-700">Jumlah Varian</span>
-                        <span class="font-bold text-violet-600">8 varian</span>
+                        <span class="font-bold text-violet-600">varian</span>
                     </div>
                     
                     <div class="p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-gray-700">Trend Penjualan</span>
-                            <span class="font-bold text-green-600 trend-up">📈 Naik 23%</span>
+                            <span class="font-bold text-green-600 trend-up">📈</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
                             <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full" style="width: 78%"></div>
@@ -260,6 +326,46 @@
                         <p class="text-xs text-gray-500 mt-1">Performa sangat baik vs bulan lalu</p>
                     </div>
                 </div>
+            </div>
+        </div>
+
+                <!-- Detail Penjualan & Stok Per Varian -->
+        <div class="bg-white rounded-xl card-shadow p-6 mt-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6">📦 Detail Penjualan & Stok Per Varian</h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Varian</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Harga</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Terjual</th>
+                            <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($product->models as $model)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center">
+                                        <span class="font-medium">
+                                            {{ $model->name ?? 'Varian #' . $model->name }}
+                                        </span>
+                                    </div>
+                                </td>
+                                    <td class="px-4 py-3 text-center">
+                                        Rp {{ number_format($model->price / 100000, 0, ',', '.') }}
+                                    </td>
+                                <td class="px-4 py-3 text-center font-semibold text-blue-600">
+                                    {{ number_format($model->sold, 0, ',', '.') }}
+                                </td>
+                                <td class="px-4 py-3 text-center font-semibold text-purple-600">
+                                    {{ number_format($model->stock, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
 

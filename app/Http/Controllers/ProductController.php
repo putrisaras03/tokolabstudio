@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function index()
     {
         // Ambil produk terbaru dengan relasi category, models, metadata
-        $products = Product::with(['category', 'metadata'])
+        $products = Product::with(['category', 'models'])
             ->latest()
             ->paginate(18);
 
@@ -25,16 +25,16 @@ class ProductController extends Controller
     }
 
     public function show($id)
-    {
-        $product = Product::with(['category', 'metadata'])
-            ->where('item_id', $id)
-            ->firstOrFail();
+        {
+            // Ambil produk + kategori + model + total_sold
+            $product = Product::withSum('models', 'sold')
+                ->with(['categories', 'models'])
+                ->where('item_id', $id)
+                ->firstOrFail();
 
-        $metadata = $product->metadata; // ambil metadata langsung
+            $user = Auth::user();
 
-        $user = Auth::user();
-
-        return view('detail', compact('product', 'metadata', 'user'));
-    }
+            return view('detail', compact('product', 'user'));
+        }
 
 }

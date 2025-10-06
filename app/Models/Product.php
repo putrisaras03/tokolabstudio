@@ -91,4 +91,31 @@ class Product extends Model
         return $sold . ' terjual';
     }
 
+    public function categories()
+        {
+            return $this->belongsToMany(
+                Category::class,
+                'product_categories',
+                'product_item_id',   // FK di pivot
+                'category_catid',    // FK di pivot
+                'item_id',           // PK di products
+                'catid'              // PK/unique di categories
+            );
+        }
+
+    public function models()
+    {
+        return $this->hasMany(ProductModel::class, 'product_item_id', 'item_id');
+    }
+
+    public function getTotalSoldAttribute()
+    {
+        return $this->models()->sum('sold');
+    }
+
+    public function getFormattedTotalSoldAttribute()
+    {
+        return number_format($this->models->sum('sold'), 0, ',', '.');
+    }
+
 }
