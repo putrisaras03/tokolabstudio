@@ -33,6 +33,14 @@
 <body class="bg-gray-50 min-h-screen">
     <div class="gradient-bg py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center mb-4">
+                <button onclick="history.back()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center mr-4">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Kembali
+                </button>
+            </div>
             <h1 class="text-3xl font-bold text-white mb-2">Detail Produk Analytics</h1>
             <p class="text-blue-100">Dashboard lengkap performa produk dan metadata penjualan</p>
         </div>
