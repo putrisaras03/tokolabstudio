@@ -231,10 +231,12 @@
                     <span class="font-bold text-purple-600">{{ $product->formatted_total_sold }} unit</span>
                 </div>
                     
-                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
-                        <span class="text-gray-700">Rata-rata/Bulan</span>
-                        <span class="font-bold text-green-600">unit</span>
-                    </div>
+                <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                    <span class="text-gray-700">Rata-rata/Bulan</span>
+                    <span class="font-bold text-green-600">
+                        {{ number_format($rataPerBulan, 0, ',', '.') }} unit
+                    </span>
+                </div>
                     
                     <div class="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
                         <span class="text-gray-700">Penjualan 30 Hari</span>
@@ -268,17 +270,23 @@
                     
                     <div class="flex justify-between items-center p-3 bg-indigo-50 rounded-lg">
                         <span class="text-gray-700">Total Pendapatan</span>
-                        <span class="font-bold text-indigo-600">Rp</span>
+                        <span class="font-bold text-indigo-600">
+                            Rp {{ number_format($totalPendapatan, 0, ',', '.') }}
+                        </span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-pink-50 rounded-lg">
                         <span class="text-gray-700">Omset Varian</span>
-                        <span class="font-bold text-pink-600">Rp</span>
+                        <span class="font-bold text-pink-600">
+                            Rp {{ number_format($omsetVarian, 0, ',', '.') }}
+                        </span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-cyan-50 rounded-lg">
                         <span class="text-gray-700">Rata-rata/Bulan</span>
-                        <span class="font-bold text-cyan-600">Rp</span>
+                        <span class="font-bold text-cyan-600">
+                            Rp {{ number_format($rataPendapatanPerBulan, 0, ',', '.') }}
+                        </span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
@@ -312,7 +320,7 @@
                     
                     <div class="flex justify-between items-center p-3 bg-violet-50 rounded-lg">
                         <span class="text-gray-700">Jumlah Varian</span>
-                        <span class="font-bold text-violet-600">varian</span>
+                        <span class="font-bold text-violet-600">{{ $product->models->count() }} varian</span>
                     </div>
                     
                     <div class="p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
