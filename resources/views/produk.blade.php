@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Rekomendasi Produk - TokoLabs</title>
-  <link rel="stylesheet" href="{{ asset('assets/css/produk.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/css/produk.css') }}?v={{ time() }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
@@ -67,28 +67,33 @@
         
         <div class="pagination-wrapper" id="paginationTop"></div>
 
+        <!-- Grid Produk -->
         <div class="produk-container" id="produkContainer">
-          @forelse ($products as $item)
-            <a href="{{ route('produk.detail', $item->item_id) }}" class="produk-item-link">
-              <div class="produk-item">
-                <img src="{{ $item->image_full_url }}" alt="Gambar Produk" class="produk-img">
-                <div class="produk-info">
-                  <div class="produk-header">
-                    <div class="produk-rating">
-                      <span class="rating-icon">⭐</span>{{ number_format($item->rating_star ?? 0, 1) }}
+          <div class="produk-grid">
+            @forelse ($products as $item)
+              <a href="{{ route('produk.detail', $item->item_id) }}" class="produk-item-link">
+                <div class="produk-item">
+                  <img src="{{ $item->image_full_url }}" alt="Gambar Produk" class="produk-img">
+                  <div class="produk-info">
+                    <div class="produk-header">
+                      <div class="produk-rating">
+                        <span class="rating-icon">⭐</span>{{ number_format($item->rating_star ?? 0, 1) }}
+                      </div>
+                      <span class="produk-harga">{{ $item->price_formatted }}</span>
                     </div>
-                    <span class="produk-harga">{{ $item->price_formatted }}</span>
-                  </div>
-                  <div class="produk-nama">{{ \Illuminate\Support\Str::limit($item->title ?? $item->name ?? '-', 40) }}</div>
-                  <div class="produk-rating-terjual">
-                    <div class="produk-terjual">{{ $item->sold_formatted }}</div>
+                    <div class="produk-nama">
+                      {{ \Illuminate\Support\Str::limit($item->title ?? $item->name ?? '-', 40) }}
+                    </div>
+                    <div class="produk-rating-terjual">
+                      <div class="produk-terjual">{{ $item->sold_formatted }}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </a>
-          @empty
-            <p>Tidak ada produk ditemukan.</p>
-          @endforelse
+              </a>
+            @empty
+              <p>Tidak ada produk ditemukan.</p>
+            @endforelse
+          </div>
         </div>
 
         <div class="buat-link-container">

@@ -279,22 +279,12 @@ body {
 }
 
 .produk-item {
-  flex: 1 1 calc(16.66% - 8px); /* 6 kolom = 100% / 6 */
-  max-width: calc(16.66% - 8px);
   box-sizing: border-box;
   border: 1px solid #eee;
   border-radius: 8px;
   overflow: hidden;
   background: #fff;
   font-family: Arial, sans-serif;
-}
-
-.produk-img {
-  width: 100%;
-  height: 160px;
-  object-fit: contain;
-  display: block;
-  background: #f9f9f9; /* opsional: kasih background biar kotak nggak kosong */
 }
 
 .produk-info {
@@ -448,4 +438,37 @@ body {
 
 .btn-buat-link:hover {
   background-color: #4338ca;
+}
+
+.produk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.produk-item {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.produk-item:hover {
+  transform: translateY(-4px);
+}
+
+.produk-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.produk-info {
+  padding: 10px;
+  font-size: 14px;
+  color: #333;
 }

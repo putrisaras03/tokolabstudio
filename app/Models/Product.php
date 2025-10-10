@@ -34,14 +34,6 @@ class Product extends Model
     ];
 
     /**
-     * Relasi 1 produk -> 1 metadata
-     */
-    public function metadata()
-    {
-        return $this->hasOne(ProductMetadata::class, 'product_id', 'item_id');
-    }
-
-    /**
      * Relasi 1 produk -> 1 kategori
      */
     public function category()
