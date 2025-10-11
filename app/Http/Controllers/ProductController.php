@@ -10,19 +10,54 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil produk terbaru dengan relasi category, models, metadata
-        $products = Product::with(['category', 'models'])
-            ->latest()
-            ->paginate(18);
+        // Ambil parameter sort dan search
+        $sort = $request->get('sort');
+        $search = $request->get('search');
 
-        // Ambil semua kategori untuk filter
+        // Query dasar produk dengan relasi
+        $query = Product::with(['category', 'models']);
+
+        // 🔍 Filter pencarian (cocok sebagian, case-insensitive)
+        if (!empty($search)) {
+            $query->whereRaw('LOWER(title) LIKE LOWER(?)', ['%' . trim($search) . '%']);
+        }
+
+        // 🧩 Terapkan urutan sesuai pilihan user
+        switch ($sort) {
+            case 'komisi_tertinggi':
+                $query->orderBy('commission', 'desc');
+                break;
+
+            case 'rating_tertinggi':
+                $query->orderBy('rating_star', 'desc');
+                break;
+
+            case 'terlaris':
+                $query->orderBy('historical_sold', 'desc');
+                break;
+
+            case 'terbaru':
+                $query->orderBy('ctime', 'desc');
+                break;
+
+            default:
+                $query->latest(); // fallback: urut berdasarkan created_at terbaru
+                break;
+        }
+
+        // 🔢 Pagination
+        $products = $query->paginate(18);
+
+        // 📂 Ambil kategori untuk filter
         $categories = Category::orderBy('display_name')->get();
 
+        // 👤 Ambil user login
         $user = Auth::user();
 
-        return view('produk', compact('products', 'user', 'categories'));
+        // 📤 Kirim data ke view
+        return view('produk', compact('products', 'user', 'categories', 'sort'));
     }
 
     public function show($id)

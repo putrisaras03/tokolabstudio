@@ -345,7 +345,7 @@
             </div>
         </div>
 
-                <!-- Detail Penjualan & Stok Per Varian -->
+        <!-- Detail Penjualan & Stok Per Varian -->
         <div class="bg-white rounded-xl card-shadow p-6 mt-8">
             <h3 class="text-xl font-bold text-gray-900 mb-6">📦 Detail Penjualan & Stok Per Varian</h3>
             
@@ -361,22 +361,29 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach($product->models as $model)
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:bg-gray-50 {{ $model->stock == 0 ? 'text-red-400' : '' }}">
+                                <!-- Nama Varian -->
                                 <td class="px-4 py-3">
                                     <div class="flex items-center">
                                         <span class="font-medium">
-                                            {{ $model->name ?? 'Varian #' . $model->name }}
+                                            {!! html_entity_decode(json_decode('"' . $model->name . '"')) ?? 'Varian #' . $loop->iteration !!}
                                         </span>
                                     </div>
                                 </td>
-                                    <td class="px-4 py-3 text-center">
-                                        Rp {{ number_format($model->price / 100000, 0, ',', '.') }}
-                                    </td>
-                                <td class="px-4 py-3 text-center font-semibold text-blue-600">
+
+                                <!-- Harga -->
+                                <td class="px-4 py-3 text-center font-semibold">
+                                    Rp {{ number_format($model->price / 100000, 0, ',', '.') }}
+                                </td>
+
+                                <!-- Terjual -->
+                                <td class="px-4 py-3 text-center font-semibold">
                                     {{ number_format($model->sold, 0, ',', '.') }}
                                 </td>
-                                <td class="px-4 py-3 text-center font-semibold text-purple-600">
-                                    {{ number_format($model->stock, 0, ',', '.') }}
+
+                                <!-- Stok -->
+                                <td class="px-4 py-3 text-center font-semibold">
+                                    {{ $model->stock == 0 ? 'Habis' : number_format($model->stock, 0, ',', '.') }}
                                 </td>
                             </tr>
                         @endforeach

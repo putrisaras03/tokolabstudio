@@ -26,6 +26,10 @@ return new class extends Migration
             // selisih dengan hari sebelumnya (penjualan hari itu)
             $table->integer('daily_sold')->default(0);
 
+            // nilai trend berdasarkan perbandingan growth rate penjualan
+            $table->decimal('trend_score', 8, 2)->nullable()
+                  ->comment('Nilai tren penjualan (persentase atau skor hasil perhitungan)');
+
             $table->timestamps();
 
             // agar 1 produk hanya punya 1 catatan per hari

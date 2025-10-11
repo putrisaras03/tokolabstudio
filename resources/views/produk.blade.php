@@ -49,19 +49,50 @@
         </div>
       </div>
 
-      <!-- Halaman Produk -->
-      <div class="halaman-produk-container">
-        <div class="filter-search">
-          <input type="text" class="search-bar" placeholder="Search...">
-          <div class="dropdown-group">
-            <select class="sort-select">
-              <option disabled selected>Urutkan</option>
-              <option value="harga_terendah">Harga Terendah</option>
-              <option value="harga_tertinggi">Harga Tertinggi</option>
-              <option value="rating_tertinggi">Rating Tertinggi</option>
-              <option value="terlaris">Terlaris</option>
-              <option value="terbaru">Terbaru</option>
-            </select>
+        <!-- Halaman Produk -->
+        <div class="halaman-produk-container">
+          <div class="filter-search flex items-center justify-between gap-3">
+
+            <!-- Search Bar -->
+            <form action="{{ route('produk.index') }}" method="GET" class="flex-1 flex items-center gap-2">
+              <input 
+                type="text" 
+                name="search" 
+                value="{{ request('search') }}" 
+                class="search-bar w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Cari produk..."
+              >
+
+              <!-- Jika kamu ingin filter sort tetap aktif saat search -->
+              @if(request('sort'))
+                <input type="hidden" name="sort" value="{{ request('sort') }}">
+              @endif
+
+              <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                Cari
+              </button>
+            </form>
+
+            <!-- Dropdown Urutkan -->
+            <div class="dropdown-group">
+              <form id="sortForm" action="{{ route('produk.index') }}" method="GET">
+                <!-- Jaga agar pencarian tidak hilang saat ganti urutan -->
+                @if(request('search'))
+                  <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
+
+                <select 
+                  name="sort" 
+                  class="sort-select px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  onchange="document.getElementById('sortForm').submit()">
+                  <option disabled {{ $sort ? '' : 'selected' }}>Urutkan</option>
+                  <option value="komisi_tertinggi" {{ $sort == 'komisi_tertinggi' ? 'selected' : '' }}>Komisi Tertinggi</option>
+                  <option value="rating_tertinggi" {{ $sort == 'rating_tertinggi' ? 'selected' : '' }}>Rating Tertinggi</option>
+                  <option value="terlaris" {{ $sort == 'terlaris' ? 'selected' : '' }}>Terlaris</option>
+                  <option value="terbaru" {{ $sort == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                </select>
+              </form>
+            </div>
           </div>
         </div>
         
@@ -72,7 +103,14 @@
           <div class="produk-grid">
             @forelse ($products as $item)
               <a href="{{ route('produk.detail', $item->item_id) }}" class="produk-item-link">
-                <div class="produk-item">
+                <div class="produk-item relative">
+                  <!-- Komisi di pojok kanan atas -->
+                  @if(isset($item->commission))
+                    <div class="produk-komisi">
+                      Rp {{ number_format($item->commission, 0, ',', '.') }}
+                    </div>
+                  @endif
+
                   <img src="{{ $item->image_full_url }}" alt="Gambar Produk" class="produk-img">
                   <div class="produk-info">
                     <div class="produk-header">

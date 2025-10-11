@@ -182,17 +182,6 @@ body {
   z-index: 999;
 }
 
-.main-content {
-  margin-left: 240px;
-  width: calc(100% - 240px);
-  transition: margin-left 0.3s ease;
-}
-
-.main-content.expanded {
-  margin-left: 70px;
-  width: calc(100% - 70px);
-}
-
 .main-content.expanded ~ .navbar,
 .sidebar.collapsed ~ .main-content .navbar,
 .sidebar.collapsed + .main-content .navbar {
@@ -231,22 +220,23 @@ body {
 }
 
   /* tabel produk */
-   .halaman-produk-container {
-  margin-top: 70px; /* 60 (navbar) + 10 */
-  padding: 20px 40px;
+.halaman-produk-container {
+  margin-top: 70px;
+  padding: 20px 0; /* tanpa padding kiri agar nempel ke sidebar */
   max-width: 1200px;
-  margin-left: auto;
+  margin-left: 0; /* pastikan nempel sidebar */
   margin-right: auto;
 }
-
 
 .filter-search {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 10px; /* dikurangi dari 20px → 10px */
+  padding-left: 10px;
+  padding-right: 20px;
 }
 
 .search-bar {
@@ -443,7 +433,10 @@ body {
 .produk-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
+  gap: 1px;
+  padding-left: 10px;
+  padding-right: 20px;
+  margin-top: 0; /* pastikan tidak ada jarak tambahan di atas grid */
 }
 
 .produk-item {
@@ -472,3 +465,59 @@ body {
   font-size: 14px;
   color: #333;
 }
+
+/* =========================
+   KOMISI PRODUK (pojok kanan atas)
+   ========================= */
+.produk-item {
+  position: relative; /* penting agar absolute bekerja */
+}
+
+.produk-item .produk-komisi {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #22c55e; /* hijau Tailwind bg-green-500 */
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.produk-item:hover .produk-komisi {
+  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(34, 197, 94, 0.4);
+}
+
+/* Hilangkan underline pada link produk */
+.produk-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Saat hover tetap tanpa garis bawah */
+.produk-item-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.main-content {
+  margin-left: 240px; /* tetap mengikuti lebar sidebar */
+  width: calc(100% - 240px);
+  transition: margin-left 0.3s ease;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.main-content.expanded {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 0;
+  padding-right: 0;
+}
+

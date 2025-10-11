@@ -53,7 +53,9 @@ Route::get('/live-accounts/{id}/edit', [LiveAccountController::class, 'edit'])->
 Route::put('/live-accounts/{id}', [LiveAccountController::class, 'update'])->name('live-accounts.update');
 Route::delete('/live-accounts/{id}', [LiveAccountController::class, 'destroy'])->name('live-accounts.destroy');
 
-Route::get('/produk', [ProductController::class, 'index'])->middleware('auth');
+Route::get('/produk', [ProductController::class, 'index'])
+    ->middleware('auth')
+    ->name('produk.index');
 Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
 
 Route::get('/schedule', function () {
