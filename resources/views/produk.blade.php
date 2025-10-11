@@ -5,6 +5,23 @@
   <title>Rekomendasi Produk - TokoLabs</title>
   <link rel="stylesheet" href="{{ asset('assets/css/produk.css') }}?v={{ time() }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* Tambahan styling agar posisi checkbox di pojok kanan bawah card */
+    .produk-item {
+      position: relative;
+    }
+
+    .produk-checkbox {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      width: 20px;
+      height: 20px;
+      accent-color: #4f46e5; /* warna biru indigo */
+      cursor: pointer;
+    }
+    
+  </style>
 </head>
 <body>
   <div class="container">
@@ -49,101 +66,111 @@
         </div>
       </div>
 
-        <!-- Halaman Produk -->
-        <div class="halaman-produk-container">
-          <div class="filter-search flex items-center justify-between gap-3">
+      <!-- Halaman Produk -->
+      <div class="halaman-produk-container">
+        <div class="filter-search flex items-center justify-between gap-3">
 
-            <!-- Search Bar -->
-            <form action="{{ route('produk.index') }}" method="GET" class="flex-1 flex items-center gap-2">
-              <input 
-                type="text" 
-                name="search" 
-                value="{{ request('search') }}" 
-                class="search-bar w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Cari produk..."
-              >
+          <!-- Search Bar -->
+          <form action="{{ route('produk.index') }}" method="GET" class="flex w-full max-w-xl">
+            <input 
+              type="text" 
+              name="search" 
+              value="{{ request('search') }}" 
+              class="search-bar flex-grow px-4 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              placeholder="Cari Produk dengan Komisi Ekstra">
 
-              <!-- Jika kamu ingin filter sort tetap aktif saat search -->
-              @if(request('sort'))
-                <input type="hidden" name="sort" value="{{ request('sort') }}">
+            @if(request('sort'))
+              <input type="hidden" name="sort" value="{{ request('sort') }}">
+            @endif
+
+            <button 
+              type="submit" 
+              class="btn-cari px-5 py-2 text-sm font-semibold text-white bg-orange-500 rounded-r-md hover:bg-orange-600 transition-colors duration-200">
+              Cari
+            </button>
+          </form>
+
+          <!-- Dropdown Urutkan -->
+          <div class="dropdown-group">
+            <form id="sortForm" action="{{ route('produk.index') }}" method="GET">
+              @if(request('search'))
+                <input type="hidden" name="search" value="{{ request('search') }}">
               @endif
 
-              <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
-                Cari
-              </button>
+              <select 
+                name="sort" 
+                class="sort-select px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                onchange="document.getElementById('sortForm').submit()">
+                <option disabled {{ $sort ? '' : 'selected' }}>Urutkan</option>
+                <option value="komisi_tertinggi" {{ $sort == 'komisi_tertinggi' ? 'selected' : '' }}>Komisi Tertinggi</option>
+                <option value="rating_tertinggi" {{ $sort == 'rating_tertinggi' ? 'selected' : '' }}>Rating Tertinggi</option>
+                <option value="terlaris" {{ $sort == 'terlaris' ? 'selected' : '' }}>Terlaris</option>
+                <option value="terbaru" {{ $sort == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+              </select>
             </form>
+          </div>
+        </div>
+      </div>
 
-            <!-- Dropdown Urutkan -->
-            <div class="dropdown-group">
-              <form id="sortForm" action="{{ route('produk.index') }}" method="GET">
-                <!-- Jaga agar pencarian tidak hilang saat ganti urutan -->
-                @if(request('search'))
-                  <input type="hidden" name="search" value="{{ request('search') }}">
+      <div class="pagination-wrapper" id="paginationTop"></div>
+
+      <!-- Grid Produk -->
+      <div class="produk-container" id="produkContainer">
+        <div class="produk-grid">
+          @forelse ($products as $item)
+            <a href="{{ route('produk.detail', $item->item_id) }}" class="produk-item-link">
+              <div class="produk-item relative">
+                @if(isset($item->commission))
+                  <div class="produk-komisi">
+                    Rp {{ number_format($item->commission, 0, ',', '.') }}
+                  </div>
                 @endif
 
-                <select 
-                  name="sort" 
-                  class="sort-select px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  onchange="document.getElementById('sortForm').submit()">
-                  <option disabled {{ $sort ? '' : 'selected' }}>Urutkan</option>
-                  <option value="komisi_tertinggi" {{ $sort == 'komisi_tertinggi' ? 'selected' : '' }}>Komisi Tertinggi</option>
-                  <option value="rating_tertinggi" {{ $sort == 'rating_tertinggi' ? 'selected' : '' }}>Rating Tertinggi</option>
-                  <option value="terlaris" {{ $sort == 'terlaris' ? 'selected' : '' }}>Terlaris</option>
-                  <option value="terbaru" {{ $sort == 'terbaru' ? 'selected' : '' }}>Terbaru</option>
-                </select>
-              </form>
-            </div>
-          </div>
-        </div>
-        
-        <div class="pagination-wrapper" id="paginationTop"></div>
-
-        <!-- Grid Produk -->
-        <div class="produk-container" id="produkContainer">
-          <div class="produk-grid">
-            @forelse ($products as $item)
-              <a href="{{ route('produk.detail', $item->item_id) }}" class="produk-item-link">
-                <div class="produk-item relative">
-                  <!-- Komisi di pojok kanan atas -->
-                  @if(isset($item->commission))
-                    <div class="produk-komisi">
-                      Rp {{ number_format($item->commission, 0, ',', '.') }}
+                <img src="{{ $item->image_full_url }}" alt="Gambar Produk" class="produk-img">
+                <div class="produk-info">
+                  <div class="produk-header">
+                    <div class="produk-rating">
+                      <span class="rating-icon">⭐</span>{{ number_format($item->rating_star ?? 0, 1) }}
                     </div>
-                  @endif
-
-                  <img src="{{ $item->image_full_url }}" alt="Gambar Produk" class="produk-img">
-                  <div class="produk-info">
-                    <div class="produk-header">
-                      <div class="produk-rating">
-                        <span class="rating-icon">⭐</span>{{ number_format($item->rating_star ?? 0, 1) }}
-                      </div>
-                      <span class="produk-harga">{{ $item->price_formatted }}</span>
-                    </div>
-                    <div class="produk-nama">
-                      {{ \Illuminate\Support\Str::limit($item->title ?? $item->name ?? '-', 40) }}
-                    </div>
-                    <div class="produk-rating-terjual">
-                      <div class="produk-terjual">{{ $item->sold_formatted }}</div>
-                    </div>
+                    <span class="produk-harga">{{ $item->price_formatted }}</span>
+                  </div>
+                  <div class="produk-nama">
+                    {{ \Illuminate\Support\Str::limit($item->title ?? $item->name ?? '-', 40) }}
+                  </div>
+                  <div class="produk-rating-terjual">
+                    <div class="produk-terjual">{{ $item->sold_formatted }}</div>
                   </div>
                 </div>
-              </a>
-            @empty
-              <p>Tidak ada produk ditemukan.</p>
-            @endforelse
-          </div>
-        </div>
 
-        <div class="buat-link-container">
-          <button class="btn-buat-link">
-            <i class="fa-solid fa-circle-plus"></i> Buat Link masal
-          </button>
+                <!-- Checkbox di pojok kanan bawah -->
+                <input 
+                  type="checkbox" 
+                  class="produk-checkbox"
+                  value="{{ $item->product_link }}">
+              </div>
+            </a>
+          @empty
+            <p>Tidak ada produk ditemukan.</p>
+          @endforelse
         </div>
+      </div>
 
-        <!-- Pagination Laravel -->
-        <div class="pagination-wrapper">
-          {{ $products->links() }}
-        </div>
+      <div class="buat-link-container flex items-center justify-end gap-3">
+        <!-- Tombol Batal -->
+        <button id="batalChecklist" class="btn-batal">
+          <span>Batal</span>
+        </button>
+
+        <!-- Tombol Buat Link Masal -->
+        <button id="buatLinkMassal" class="btn-buat-link">
+          <i class="fa-solid fa-circle-plus"></i>
+          <span>Buat Link masal</span>
+        </button>
+      </div>
+
+      <!-- Pagination Laravel -->
+      <div class="pagination-wrapper">
+        {{ $products->links() }}
       </div>
     </div>
   </div>
@@ -162,6 +189,35 @@
     toggleBtn.addEventListener('click', function () {
       sidebar.classList.toggle('collapsed');
       mainContent.classList.toggle('expanded');
+    });
+
+    // ✅ Buat file CSV berisi link produk yang dicentang
+    document.getElementById("buatLinkMassal").addEventListener("click", function() {
+      const checked = document.querySelectorAll(".produk-checkbox:checked");
+      if (checked.length === 0) {
+        alert("Pilih minimal satu produk terlebih dahulu!");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      checked.forEach(chk => {
+        csvContent += chk.value + "\n";
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "link_produk.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // ✅ Tombol Batal untuk menghapus semua checklist
+    document.getElementById("batalChecklist").addEventListener("click", function() {
+      const checkboxes = document.querySelectorAll(".produk-checkbox");
+      checkboxes.forEach(chk => chk.checked = false);
+      alert("Semua produk yang dipilih akan dibatalkan!");
     });
   </script>
 </body>

@@ -321,9 +321,31 @@
                     
                     <div class="flex justify-between items-center p-3 bg-teal-50 rounded-lg">
                         <span class="text-gray-700">Umur Produk</span>
-                        <span class="font-bold text-teal-600">
-                            {{ ceil(\Carbon\Carbon::parse($product->ctime)->diffInDays(now()) / 30) }} bulan
-                        </span>
+                        @php
+                            use Carbon\Carbon;
+
+                            $ctime = $product->ctime;
+
+                            try {
+                                if (is_numeric($ctime)) {
+                                    $ctimeInt = (int) $ctime;
+                                    // Deteksi milidetik atau detik
+                                    $createdAt = strlen((string) $ctimeInt) > 10
+                                        ? Carbon::createFromTimestampMs($ctimeInt)
+                                        : Carbon::createFromTimestamp($ctimeInt);
+                                } else {
+                                    $createdAt = Carbon::parse($ctime);
+                                }
+                            } catch (\Exception $e) {
+                                $createdAt = now();
+                            }
+
+                            // Hitung umur produk dalam bulan (dibulatkan ke bawah agar natural)
+                            $diffDays = $createdAt->diffInDays(now());
+                            $umurProduk = max(1, floor($diffDays / 30)); // 14.5 → 14 bulan
+                        @endphp
+
+                        <span class="font-bold text-teal-600">{{ $umurProduk }} bulan</span>
                     </div>
                     
                     <div class="flex justify-between items-center p-3 bg-violet-50 rounded-lg">

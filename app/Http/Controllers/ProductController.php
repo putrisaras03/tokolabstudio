@@ -69,44 +69,55 @@ class ProductController extends Controller
 
         $user = Auth::user();
 
-        // pastikan total sold (fallback ke 0)
+        // Total sold aman
         $modelsSold = (int) ($product->models_sum_sold ?? 0);
 
-        // DETEKSI format ctime dengan aman:
+        // --- Deteksi format ctime ---
         $ctime = $product->ctime;
 
         if (is_numeric($ctime)) {
             $ctimeInt = (int) $ctime;
-            // bila panjang > 10 kemungkinan milidetik
-            if (strlen((string) $ctimeInt) > 10) {
-                // milidetik
-                $createdAt = Carbon::createFromTimestampMs($ctimeInt);
-            } else {
-                // detik
-                $createdAt = Carbon::createFromTimestamp($ctimeInt);
-            }
+            // jika milidetik (panjang > 10)
+            $createdAt = strlen((string) $ctimeInt) > 10
+                ? Carbon::createFromTimestampMs($ctimeInt)
+                : Carbon::createFromTimestamp($ctimeInt);
         } else {
-            // string datetime (contoh: "2024-10-03 12:00:00")
             $createdAt = Carbon::parse($ctime);
         }
 
-        // Hitung umur dalam bulan (bulat ke atas), minimal 1 bulan untuk hindari pembagian 0
-        $umurProduk = (int) max(1, ceil($createdAt->diffInDays(now()) / 30));
+        // --- Hitung umur produk dalam bulan ---
+        $diffDays = $createdAt->diffInDays(now());
+        $umurProduk = max(1, round($diffDays / 30, 1)); // hasil 14.3 → 14.3 bulan (1 desimal)
 
-        // Rata-rata per bulan (1 desimal)
-        $rataPerBulan = $umurProduk > 0 ? ceil($modelsSold / $umurProduk) : $modelsSold;
+        // Jika ingin ditampilkan bulat tapi tidak berlebihan, bisa pakai floor()
+        $umurProdukBulat = max(1, floor($diffDays / 30)); // hasil 14.3 → 14 bulan
 
-        // Hitung total pendapatan
+        // --- Hitung rata-rata per bulan (pakai umur bulat agar logis) ---
+        $rataPerBulan = $umurProdukBulat > 0 ? ceil($modelsSold / $umurProdukBulat) : $modelsSold;
+
+        // --- Hitung total pendapatan ---
         $totalPendapatan = ($product->price_min / 100000) * $product->historical_sold;
 
-        // Hitung total omset varian (sum of sold * price)
+        // --- Total omset varian ---
         $omsetVarian = $product->models->sum(function ($model) {
             return ($model->price / 100000) * $model->sold;
         });
 
-        // Rata-rata pendapatan per bulan
-        $rataPendapatanPerBulan = $umurProduk > 0 ? ceil($totalPendapatan / $umurProduk) : $totalPendapatan;
+        // --- Rata-rata pendapatan per bulan ---
+        $rataPendapatanPerBulan = $umurProdukBulat > 0
+            ? ceil($totalPendapatan / $umurProdukBulat)
+            : $totalPendapatan;
 
-        return view('detail', compact('product', 'user', 'umurProduk', 'rataPerBulan', 'totalPendapatan', 'omsetVarian', 'rataPendapatanPerBulan'));
+        return view('detail', compact(
+            'product',
+            'user',
+            'umurProduk',
+            'umurProdukBulat',
+            'rataPerBulan',
+            'totalPendapatan',
+            'omsetVarian',
+            'rataPendapatanPerBulan',
+            'createdAt'
+        ));
     }
 }
