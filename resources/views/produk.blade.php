@@ -90,6 +90,14 @@
             </button>
           </form>
 
+          <!-- Checkbox Pilih Semua Produk -->
+        <div class="pilih-semua flex items-center gap-2">
+          <input type="checkbox" id="pilihSemua" class="w-4 h-4 cursor-pointer accent-indigo-600">
+          <label for="pilihSemua" class="text-sm text-gray-700 select-none cursor-pointer">
+            Pilih semua produk di halaman ini
+          </label>
+        </div>
+
           <!-- Dropdown Urutkan -->
           <div class="dropdown-group">
             <form id="sortForm" action="{{ route('produk.index') }}" method="GET">
@@ -155,23 +163,32 @@
         </div>
       </div>
 
-      <div class="buat-link-container flex items-center justify-end gap-3">
-        <!-- Tombol Batal -->
-        <button id="batalChecklist" class="btn-batal">
-          <span>Batal</span>
-        </button>
-
-        <!-- Tombol Buat Link Masal -->
-        <button id="buatLinkMassal" class="btn-buat-link">
-          <i class="fa-solid fa-circle-plus"></i>
-          <span>Buat Link masal</span>
-        </button>
+      <div class="buat-link-container flex items-center justify-end gap-4">
+      <!-- Jumlah produk dicentang -->
+      <div id="jumlahChecklist" class="text-gray-700 text-sm font-medium">
+        0 produk dipilih
       </div>
+
+      <!-- Tombol Batal -->
+      <button id="batalChecklist" class="btn-batal">
+        <span>Batal</span>
+      </button>
+
+      <!-- Tombol Buat Link Masal -->
+      <button id="buatLinkMassal" class="btn-buat-link">
+        <i class="fa-solid fa-circle-plus"></i>
+        <span>Buat Link masal</span>
+      </button>
+    </div>
 
       <!-- Pagination Laravel -->
-      <div class="pagination-wrapper">
-        {{ $products->links() }}
-      </div>
+      @if ($products->hasPages())
+        <div class="pagination-container">
+          <div class="pagination-wrapper">
+            {{ $products->links('vendor.pagination.bootstrap-5') }}
+          </div>
+        </div>
+      @endif
     </div>
   </div>
 
@@ -213,12 +230,44 @@
       document.body.removeChild(link);
     });
 
-    // ✅ Tombol Batal untuk menghapus semua checklist
+    // ✅ Update jumlah produk yang dicentang secara real-time
+    const jumlahChecklist = document.getElementById("jumlahChecklist");
+    const checkboxes = document.querySelectorAll(".produk-checkbox");
+
+    function updateJumlahChecklist() {
+      const count = document.querySelectorAll(".produk-checkbox:checked").length;
+      jumlahChecklist.textContent = `${count} produk dipilih`;
+    }
+
+    // Jalankan update saat checkbox diubah
+    checkboxes.forEach(chk => {
+      chk.addEventListener("change", updateJumlahChecklist);
+    });
+
+    // Reset jumlah jika tombol batal ditekan
     document.getElementById("batalChecklist").addEventListener("click", function() {
-      const checkboxes = document.querySelectorAll(".produk-checkbox");
       checkboxes.forEach(chk => chk.checked = false);
+      updateJumlahChecklist();
+
+      // ✅ Jika sebelumnya "Pilih Semua" aktif, matikan juga
+      const pilihSemua = document.getElementById("pilihSemua");
+      if (pilihSemua.checked) {
+        pilihSemua.checked = false;
+      }
+
       alert("Semua produk yang dipilih akan dibatalkan!");
     });
+
+    // ✅ Fungsi Pilih Semua Produk
+    const pilihSemua = document.getElementById("pilihSemua");
+
+    if (pilihSemua) {
+      pilihSemua.addEventListener("change", function() {
+        const allCheckboxes = document.querySelectorAll(".produk-checkbox");
+        allCheckboxes.forEach(chk => chk.checked = pilihSemua.checked);
+        updateJumlahChecklist();
+      });
+    }
   </script>
 </body>
 </html>

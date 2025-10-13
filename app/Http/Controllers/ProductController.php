@@ -48,7 +48,7 @@ class ProductController extends Controller
         }
 
         // 🔢 Pagination
-        $products = $query->paginate(18);
+        $products = $query->paginate(5);
 
         // 📂 Ambil kategori untuk filter
         $categories = Category::orderBy('display_name')->get();

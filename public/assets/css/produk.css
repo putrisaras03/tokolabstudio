@@ -233,9 +233,9 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 10px; /* dikurangi dari 20px → 10px */
-  padding-left: 10px;
+  gap: 12px;
+  margin-bottom: -25px; 
+  padding-left: 20px;
   padding-right: 20px;
 }
 
@@ -249,16 +249,26 @@ body {
 
 .dropdown-group {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 4px;
 }
 
 .filter-select,
 .sort-select {
-  padding: 10px;
+  height: 42px; /* disamakan dengan checkbox */
+  padding: 0 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
   background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+
+.sort-select:focus {
+  border-color: #6366f1;
+  outline: none;
 }
 
 .produk-container {
@@ -404,39 +414,13 @@ body {
   color: #5c5c91;
 }
 
-
-/* .buat-link-container {
-  display: flex;
-  justify-content: flex-end;
-  margin: 20px 20px 0 0;
-} */
-
-/* .btn-buat-link {
-  background-color: #4f46e5;
-  color: white;
-  padding: 10px 10px;
-  border-radius: 8px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: background-color 0.2s ease;
-} */
-
-/* .btn-buat-link:hover {
-  background-color: #4338ca;
-} */
-
 .produk-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 1px;
-  padding-left: 10px;
-  padding-right: 20px;
-  margin-top: 0; /* pastikan tidak ada jarak tambahan di atas grid */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding: 0 20px;
+  margin-top: 0;
+  justify-items: center;
 }
 
 .produk-item {
@@ -526,7 +510,10 @@ body {
   bottom: 30px;
   right: 30px;
   display: flex;
-  gap: 10px;
+  align-items: center; /* ✅ ini penting agar sejajar secara vertikal */
+  justify-content: flex-end; /* tombol di kanan */
+  gap: 12px; /* jarak antar elemen */
+  width: auto;
   z-index: 50;
 }
 
@@ -607,4 +594,187 @@ body {
 
 .btn-cari:active {
   transform: scale(0.97);
+}
+
+.produk-card {
+  width: 100%;
+  max-width: 220px;
+}
+
+@media (max-width: 1200px) {
+  .produk-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .produk-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .produk-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+#jumlahChecklist {
+  padding-left: 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* Checkbox Pilih Semua Produk */
+.pilih-semua {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px; /* sama tinggi dengan dropdown */
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+/* Hover biar responsif */
+.pilih-semua:hover {
+  background-color: #f9fafb;
+  border-color: #bbb;
+}
+
+/* Checkbox di dalamnya */
+.pilih-semua input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4f46e5;
+  cursor: pointer;
+}
+
+/* Label agar sejajar sempurna */
+.pilih-semua label {
+  color: #374151;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* ===============================
+   FIX PAGINATION STYLE (Laravel Links)
+   =============================== */
+.page-item .page-link {
+  border-radius: 6px;
+  color: #4f46e5;
+  border: 1px solid #d1d5db;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.page-item .page-link:hover {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.page-item.active .page-link {
+  background-color: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+}
+
+.pagination-wrapper {
+  justify-content: center !important;
+  margin: 20px auto;
+}
+
+/* 🎯 Pagination Modern & Centered */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.pagination-wrapper nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-wrapper nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Gaya tombol angka dan panah */
+.pagination-wrapper nav ul li a,
+.pagination-wrapper nav ul li span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  background-color: transparent;
+  border: none;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+/* Hover efek */
+.pagination-wrapper nav ul li a:hover {
+  background-color: rgba(79, 70, 229, 0.1);
+  color: var(--primary);
+}
+
+/* Halaman aktif */
+.pagination-wrapper nav ul li span[aria-current="page"] {
+  background-color: var(--primary);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+}
+
+/* Panah kiri/kanan */
+.pagination-wrapper nav ul li .page-link {
+  font-size: 16px;
+}
+
+.pagination-wrapper nav ul li.disabled span,
+.pagination-wrapper nav ul li span[aria-disabled="true"] {
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+/* Pastikan tidak ada border atau kotak bootstrap */
+.pagination-wrapper nav ul li a,
+.pagination-wrapper nav ul li span {
+  border: none !important;
+  background: none;
+}
+
+/* Efek aktif (klik cepat) */
+.pagination-wrapper nav ul li a:active {
+  transform: scale(0.95);
+}
+
+/* Responsif */
+@media (max-width: 600px) {
+  .pagination-wrapper nav ul li a,
+  .pagination-wrapper nav ul li span {
+    min-width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
 }
